@@ -1,0 +1,134 @@
+<html>
+<head>
+
+	<!-- <meta http-equiv='Content-Security-Policy' content="default-src 'self' ; script-src 'self' 'unsafe-inline' ;img-src 'self' *;"> -->
+	<meta http-equiv='cache-control' content='no-cache'>
+	<meta http-equiv='expires' content='0'>
+	<meta http-equiv='pragma' content='no-cache'>
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="-1" />
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, shrink-to-fit=no">
+	
+	<script src='./js/jquery.min.js'></script>
+	<script src='./js/three.min.js'></script>
+	<script src='./js/panolens.js'></script>
+	<script src='./js/main.js'></script>
+	<style>
+    html, body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #000;
+      }
+
+	#progress {
+        width: 0;
+        height: 5px;
+        position: fixed;
+        top: 0;
+        background: #fff;
+        -webkit-transition: opacity 0.5s ease;
+        transition: opacity 0.5s ease;
+      }
+
+    #progress.finish {
+        opacity: 0;
+    }
+	  
+    </style>
+	
+	
+</head>
+<body onload="docOnload()" >
+<div id="progress" style="width: 100%;" class="finish"></div>
+<label id="LoadingLabelId" style="position:absolute;display:none;top:40%;left:30%;font-size:40px;color:#eeeeee;z-index:1;">Loading page, Please wait...</label>
+<audio id="myAudio">
+	<source id="audioSource" src="Audio/1.mp3" type="audio/mpeg"/>
+</audio>
+
+<script>
+	var dataJson = {"scenes":[{"sceneName":"1","image":"1 PIC_HighestDeck.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-4079.22","y":"-2384.44","z":"-1609.02"},"infoHoverText":"HighestDeck Radar2"},{"infoPointsName":"69","infoPointsCoordinates":{"x":"2279.56","y":"-4444.91","z":"-161.72"},"infoHoverText":"BERGEBULK"}]},{"sceneName":"2","image":"2 PIC_HighestDeck_Radar2_00000.jpg","infoPoints":[{"infoPointsName":"1","infoPointsCoordinates":{"x":"-3793.74","y":"-1796.61","z":"-2707.11"},"infoHoverText":"HighestDeck"},{"infoPointsName":"3","infoPointsCoordinates":{"x":"-69.59","y":"-1336.17","z":"4810.56"},"infoHoverText":"HighestDeck Radar"},{"infoPointsName":"4","infoPointsCoordinates":{"x":"3407.91","y":"-1048.01","z":"3491.85"},"infoHoverText":"HighestDeck Radar4"}]},{"sceneName":"3","image":"3 PIC_HighestDeck_Radar_00000.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-2120.68","y":"-1185.78","z":"4362.70"},"infoHoverText":"HighestDeck Radar2"}]},{"sceneName":"4","image":"4 PIC_HighestDeck_Radar4_00000.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-4624.51","y":"-1797.39","z":"-564.04"},"infoHoverText":"HighestDeck Radar2"}]},{"sceneName":"69","image":"69 PIC_BERGEBULK_00000 Also linked to 1.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-2361.37","y":"4382.49","z":"-408.43"},"infoHoverText":"HighestDeck"}]}]};
+
+	var loadingLabel = document.getElementById('LoadingLabelId');
+	var progress;
+	var audio = document.getElementById('myAudio');
+	var source = document.getElementById('audioSource');
+	
+	var progressElement = document.getElementById( 'progress' );
+
+    function onEnter ( event ) {
+		//loadingLabel.style.display = "block";
+        progressElement.style.width = 0;
+        progressElement.classList.remove( 'finish' );
+    }
+
+    function onProgress ( event ) {
+
+        progress = event.progress.loaded / event.progress.total * 100;
+        progressElement.style.width = progress + '%';
+        if ( progress === 100 ) {
+          progressElement.classList.add( 'finish' );
+		  //loadingLabel.style.display = "none";
+        }
+    }
+	
+	function docOnload()
+	{
+		var shipDeck = new ShipDeck();
+		shipDeck.initialize(dataJson);
+	
+		document.addEventListener('keydown', function(event) {
+			const key = event.key; // Or const {key} = event; in ES6+
+			if (key === "Escape") {
+				console.log("--Escape key pressed----------");
+				if ( document.exitFullscreen ) { document.exitFullscreen(); }
+				if ( document.msExitFullscreen ) { document.msExitFullscreen(); }
+				if ( document.mozCancelFullScreen ) { document.mozCancelFullScreen(); }
+				if ( document.webkitExitFullscreen ) { document.webkitExitFullscreen(); }
+			}
+		});
+		
+		audio.onended = function() {
+			//console.log("Audio ended-----");
+		};
+	}
+	
+	function ClickToNextPanoImage(pano)
+	{
+		//console.log("-------------------pano-------------");
+		//console.log(pano);
+		if(pano.name == "1" || pano.name == "2")
+		{
+			source.src = "./Audio/"+pano.name+".mp3";
+			audio.load(); 
+			audio.play();
+		}
+	}
+	function requestOrientation()
+	{
+		if (typeof DeviceMotionEvent.requestPermission === 'function') {
+	    DeviceMotionEvent.requestPermission()
+		.then(response => {
+		  if (response == 'granted') {
+			window.addEventListener('devicemotion', (e) => {
+			  // do something with e
+			})
+		  }
+		})
+		.catch(console.error)
+		} else {
+		  // non iOS 13+
+		}
+	}
+	
+	
+	
+	
+</script>
+
+</body>
+</html>
+=======
+"Hello World" 
+>>>>>>> 183b7e74abd374f598baf5f32b61b3cc882d2024
