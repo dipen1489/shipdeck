@@ -2221,7 +2221,6 @@
 	        }
 
 	        if ( this.mode === MODES.CARDBOARD || this.mode === MODES.STEREO ) {
-
 	            element.left.style.display = element.style.display;
 	            element.right.style.display = element.style.display;
 	            element.style.display = 'none';
@@ -2957,7 +2956,6 @@
 				!document.webkitFullscreenEnabled &&
 				!document.mozFullScreenEnabled    &&
 				!document.msFullscreenEnabled ) {
-				console.log("Dont create button----------");
 	            return;
 	        }
 
@@ -3183,7 +3181,6 @@
 	        progressElementControl.addEventListener( 'touchstart', onMouseDown,  { passive: true } );
 
 	        function onMouseDown ( event ) {
-				//console.log("---------11111---------------");
 	            event.stopPropagation();
 				
 	            isDragging = true;
@@ -3752,7 +3749,6 @@
 
 	        // White glow on icon
 	        item.addEventListener( scope.TOUCH_ENABLED ? 'touchstart' : 'mouseenter', function() {
-				//console.log("---------22222---------------");
 	            item.style.filter = 
 				item.style.webkitFilter = 'drop-shadow(0 0 5px rgba(255,255,255,1))';
 	        }, { passive: true });
@@ -4244,10 +4240,9 @@
 	        spot.toPanorama = pano;
 			spot.addHoverText( infoText );
 	        spot.addEventListener( 'click', function () {
-				//console.log("--------Icon Click-----------");
 				$(".panolens-infospot").css("display","none");
 				//document.getElementsByClassName("panolens-infospot").style.display = "none";
-				ClickToNextPanoImage(pano);
+				//ClickToNextPanoImage(pano);
 	            /**
 	             * Viewer handler event
 	             * @type {object}
@@ -5846,7 +5841,6 @@
 	    },
 
 	    onMouseDown: function ( event ) {
-			//console.log("---------33333---------------");
 	        const inputCount = ( event.touches && event.touches.length ) || 1 ;
 
 	        switch ( inputCount ) {
@@ -6849,7 +6843,6 @@
 	    }
 
 	    function touchstart( event ) {
-			//console.log("---------444444---------------");
 	        momentumOn = false;
 
 	        momentumLeft = momentumUp = 0;
@@ -7089,7 +7082,6 @@
 	    };
 
 	    var onTouchStartEvent = function (event) {
-			//console.log("---------55555555---------------");
 	        event.preventDefault();
 	        event.stopPropagation();
 
@@ -7237,7 +7229,6 @@
 	 * @param {THREE.WebGLRenderer} renderer 
 	 */
 	function CardboardEffect ( renderer ) {
-
 	    var _camera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
 
 	    var _scene = new THREE.Scene();
@@ -7848,7 +7839,6 @@
 	            switch( mode ) {
 
 	            case MODES.CARDBOARD:
-
 	                item = ModeMenuItem.subMenu.children[ 2 ];
 
 	                break;
@@ -7880,7 +7870,8 @@
 	     * @instance
 	     */
 	    enableEffect: function ( mode ) {
-
+			this.enableControl(1);
+			console.log("--------enableEffect---------------");
 	        if ( this.mode === mode ) { return; }
 	        if ( mode === MODES.NORMAL ) { this.disableEffect(); return; }
 	        else { this.mode = mode; }
@@ -7890,7 +7881,7 @@
 	        switch( mode ) {
 
 	        case MODES.CARDBOARD:
-
+				console.log("--------66666666---------------");
 	            this.effect = this.CardboardEffect;
 	            this.enableReticleControl();
 
@@ -7944,7 +7935,7 @@
 	     * @instance
 	     */
 	    disableEffect: function () {
-
+			this.enableControl(0);
 	        if ( this.mode === MODES.NORMAL ) { return; }
 
 	        this.mode = MODES.NORMAL;
@@ -7978,7 +7969,6 @@
 	     * @instance
 	     */
 	    enableReticleControl: function () {
-
 	        if ( this.reticle.visible ) { return; }
 
 	        this.tempEnableReticle = true;
@@ -8355,6 +8345,7 @@
 	     * @instance
 	     */
 	    enableControl: function ( index ) {
+			console.log("---------enableControl-------- : "+index);
 	        index = ( index >= 0 && index < this.controls.length ) ? index : 0;
 
 	        this.control.enabled = false;
@@ -8366,12 +8357,14 @@
 	        switch ( index ) {
 
 	        case CONTROLS.ORBIT:
+				console.log("---------ORBIT--------");
 	            this.camera.position.copy( this.panorama.position );
 	            this.camera.position.z += 1;
 
 	            break;
 
 	        case CONTROLS.DEVICEORIENTATION:
+				console.log("---------DEVICEORIENTATION--------");
 				requestOrientation();
 	            this.camera.position.copy( this.panorama.position );
 
@@ -8723,7 +8716,6 @@
 	     * @instance
 	     */
 	    onMouseDown: function ( event ) {
-			//console.log("---------66666---------------");
 	        event.preventDefault();
 
 	        this.userMouse.x = ( event.clientX >= 0 ) ? event.clientX : event.touches[0].clientX;
@@ -9168,7 +9160,6 @@
 	    render: function () {
 
 	        if ( this.mode === MODES.CARDBOARD || this.mode === MODES.STEREO ) {
-
 	            this.renderer.clear();
 	            this.effect.render( this.scene, this.camera );
 	            this.effect.render( this.sceneReticle, this.camera );
