@@ -1,3 +1,30 @@
+var isFullscreen = false;
+
+function EnableFullScreen(isFullscreen)
+{
+	console.log("");
+	if ( !isFullscreen ) {
+
+		if ( container.requestFullscreen ) { container.requestFullscreen(); }
+		if ( container.msRequestFullscreen ) { container.msRequestFullscreen(); }
+		if ( container.mozRequestFullScreen ) { container.mozRequestFullScreen(); }
+		if ( container.webkitRequestFullscreen ) { container.webkitRequestFullscreen( Element.ALLOW_KEYBOARD_INPUT ); }
+	  
+		isFullscreen = true;
+
+	} else {
+
+		if ( document.exitFullscreen ) { document.exitFullscreen(); }
+		if ( document.msExitFullscreen ) { document.msExitFullscreen(); }
+		if ( document.mozCancelFullScreen ) { document.mozCancelFullScreen(); }
+		if ( document.webkitExitFullscreen ) { document.webkitExitFullscreen( ); }
+
+		isFullscreen = false;
+
+	}
+	return isFullscreen;
+}
+
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('three')) :
 	typeof define === 'function' && define.amd ? define(['exports', 'three'], factory) :
@@ -2943,9 +2970,39 @@
 	     * @instance
 	     * @fires Widget#panolens-viewer-handler
 	     */
+		
+		EnableDisableFullScreen: function(){
+			const { container } = this;
+			if ( !isFullscreen ) {
+
+				if ( container.requestFullscreen ) { container.requestFullscreen(); }
+				if ( container.msRequestFullscreen ) { container.msRequestFullscreen(); }
+				if ( container.mozRequestFullScreen ) { container.mozRequestFullScreen(); }
+				if ( container.webkitRequestFullscreen ) { container.webkitRequestFullscreen( Element.ALLOW_KEYBOARD_INPUT ); }
+			  
+				isFullscreen = true;
+
+			} else {
+
+				if ( document.exitFullscreen ) { document.exitFullscreen(); }
+				if ( document.msExitFullscreen ) { document.msExitFullscreen(); }
+				if ( document.mozCancelFullScreen ) { document.mozCancelFullScreen(); }
+				if ( document.webkitExitFullscreen ) { document.webkitExitFullscreen( ); }
+
+				isFullscreen = false;
+
+			}
+			
+			console.log("-------here on EnableDisableFullScreen------ : "+isFullscreen);
+			
+			 this.fullscreenElement.style.backgroundImage = ( isFullscreen ) 
+	                ? 'url("' + DataImage.FullscreenLeave + '")' 
+	                : 'url("' + DataImage.FullscreenEnter + '")'; 
+		},
+		 
 	    createFullscreenButton: function () {
 			//console.log("createFullscreenButton----------111");
-	        let scope = this, item, isFullscreen = false, tapSkipped = true, stylesheetId;
+	        let scope = this, item, /* isFullscreen = false, */ tapSkipped = true, stylesheetId;
 
 	        const { container } = this;
 
@@ -2965,8 +3022,10 @@
 	            event.stopPropagation();
 
 	            tapSkipped = false;
+				
+				//this.EnableDisableFullScreen();
 
-	            if ( !isFullscreen ) {
+	             if ( !isFullscreen ) {
 
 	                if ( container.requestFullscreen ) { container.requestFullscreen(); }
 	                if ( container.msRequestFullscreen ) { container.msRequestFullscreen(); }
@@ -2984,22 +3043,27 @@
 
 	                isFullscreen = false;
 
-	            }
+	            } 
+				
+				console.log("fullScreen : "+isFullscreen);
 
 	            this.style.backgroundImage = ( isFullscreen ) 
 	                ? 'url("' + DataImage.FullscreenLeave + '")' 
 	                : 'url("' + DataImage.FullscreenEnter + '")';
+					
+				//isFullScreenEnabled = isFullscreen;
 
 	        }
 
 	        function onFullScreenChange () {
 	            if ( tapSkipped ) {
 
-	                isFullscreen = !isFullscreen; 
+	                //isFullscreen = !isFullscreen; 
+					//isFullScreenEnabled = isFullscreen;
 
-	                item.style.backgroundImage = ( isFullscreen ) 
+	                /* item.style.backgroundImage = ( isFullscreen ) 
 	                    ? 'url("' + DataImage.FullscreenLeave + '")' 
-	                    : 'url("' + DataImage.FullscreenEnter + '")';
+	                    : 'url("' + DataImage.FullscreenEnter + '")'; */
 
 	            }
 
@@ -7926,7 +7990,7 @@
 	         * @property {MODES} mode - Current display mode
 	         */
 	        this.dispatchEvent( { type: 'mode-change', mode: this.mode } );
-
+			this.widget.EnableDisableFullScreen();
 	    },
 
 	    /**
@@ -7936,6 +8000,7 @@
 	     */
 	    disableEffect: function () {
 			this.enableControl(0);
+			this.widget.EnableDisableFullScreen();
 	        if ( this.mode === MODES.NORMAL ) { return; }
 
 	        this.mode = MODES.NORMAL;
@@ -7961,6 +8026,7 @@
 	         * @property {MODES} mode - Current display mode
 	         */
 	        this.dispatchEvent( { type: 'mode-change', mode: this.mode } );
+			
 	    },
 
 	    /**
