@@ -1,18 +1,12 @@
 <html>
 <head>
 
-	<!-- <meta http-equiv='Content-Security-Policy' content="default-src 'self' ; script-src 'self' 'unsafe-inline' ;img-src 'self' *;"> -->
 	<meta http-equiv='cache-control' content='no-cache'>
 	<meta http-equiv='expires' content='0'>
 	<meta http-equiv='pragma' content='no-cache'>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="-1" />
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, shrink-to-fit=no">
-	
-	<script src='./js/jquery.min.js'></script>
-	<script src='./js/three.min.js'></script>
-	<script src='./js/panolens.js'></script>
-	<script src='./js/main.js'></script>
 	<style>
     html, body {
         margin: 0;
@@ -35,12 +29,64 @@
     #progress.finish {
         opacity: 0;
     }
-	  
+	
+	.centerDiv{
+		background:url(Logo/shipdeck.jpg) 30% 50%;
+		background-size: cover;
+	}
+	
+	.LinkImage{
+		cursor:pointer;
+		position:absolute;
+		width: 50px;
+		height: 50px;
+		background:rgba(217,0,0,0.8);
+		box-shadow: -1px -1px 11px 1px #ffffff;
+		border-radius: 70px;
+	}
+	
     </style>
-	
-	
+	<script src='./js/jquery.min.js'></script>
+	<script src='./js/three.min.js'></script>
+	<script src='./js/panolens.js?n=1'></script>
+	<script src='./js/main.js'></script>
 </head>
 <body onload="docOnload()" >
+
+
+
+<div class="centerDiv" style="position:absolute;top:0px;left:0px;width:100%;height:100%;z-index:1">
+	<!-- <img src="Logo/shipdeck.jpg" style="position:absolute;top:0px;left:0px;width:100%;height:100%;"> -->
+	<img src="Logo/logo.png" style="position:absolute;top:20px;left:20px;width:170px;">
+	
+	<div onclick="LinkTo360View()" align="center" class="LinkImage link1" style="top:37%;left:30%;">
+		 <img src="Logo/360.png" style="width: 100%;height: 100%;"> 
+	</div>
+	
+	<div onclick="LinkTo360View()" align="center" class="LinkImage link2" style="top: 72%;left: 10%;">
+		 <img src="Logo/360.png" style="width: 100%;height: 100%;"> 
+	</div>
+	
+	<div onclick="LinkTo360View()" align="center" class="LinkImage link3" style="top:37%;left: 56%;">
+		 <img src="Logo/360.png" style="width: 100%;height: 100%;"> 
+	</div>
+	
+	<div onclick="LinkTo360View()" align="center" class="LinkImage link4" style="top: 24%;left: 86%;">
+		 <img src="Logo/360.png" style="width: 100%;height: 100%;"> 
+	</div>
+	
+	<!-- <div align="center" class="centerDiv" style="cursor:pointer;position:relative;margin:0 auto;top:40%;width:220px;height:110px;background:rgba(83, 83, 83, 0.3);box-shadow: -1px -1px 11px 1px #cccccc;">
+		<img src="Logo/360.png" style="width:100px;height:100px;position:absolute;top:-10px;left:60px;">
+		<label style="color:#D6D7D8;font-size:20px;position:absolute;width:200px;top:80px;left:10px;font-family:Arial">Start 360&#176; Virtual Tour</label>
+	</div> -->
+	
+	<!-- <div align="center" class="centerDiv" style="cursor:pointer;position:relative;margin:0 auto;top: 45%;width: 430px;height: 80px;background:rgba(83, 83, 83, 0.3);box-shadow: -1px -1px 11px 1px #cccccc;">
+		<img src="Logo/360.png" style="width:100px;height:100px;position:absolute;top:-10px;left: 10px;">
+		<label style="color:#D6D7D8;font-size: 40px;position:absolute;width: 300px;top: 20px;left: 115px;font-family:Arial;">Start 360&#176; Virtual Tour</label>
+	</div> -->
+	
+</div>
+
 <div id="progress" style="width: 100%;" class="finish"></div>
 <label id="LoadingLabelId" style="position:absolute;display:none;top:40%;left:30%;font-size:40px;color:#eeeeee;z-index:1;">Loading page, Please wait...</label>
 <audio id="myAudio">
@@ -48,7 +94,17 @@
 </audio>
 
 <script>
-	var dataJson = {"scenes":[{"sceneName":"1","image":"1 PIC_HighestDeck.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-4079.22","y":"-2384.44","z":"-1609.02"},"infoHoverText":"HighestDeck Radar2"},{"infoPointsName":"69","infoPointsCoordinates":{"x":"2279.56","y":"-4444.91","z":"-161.72"},"infoHoverText":"BERGEBULK"}]},{"sceneName":"2","image":"2 PIC_HighestDeck_Radar2_00000.jpg","infoPoints":[{"infoPointsName":"1","infoPointsCoordinates":{"x":"-3793.74","y":"-1796.61","z":"-2707.11"},"infoHoverText":"HighestDeck"},{"infoPointsName":"3","infoPointsCoordinates":{"x":"-69.59","y":"-1336.17","z":"4810.56"},"infoHoverText":"HighestDeck Radar"},{"infoPointsName":"4","infoPointsCoordinates":{"x":"3407.91","y":"-1048.01","z":"3491.85"},"infoHoverText":"HighestDeck Radar4"}]},{"sceneName":"3","image":"3 PIC_HighestDeck_Radar_00000.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-2120.68","y":"-1185.78","z":"4362.70"},"infoHoverText":"HighestDeck Radar2"}]},{"sceneName":"4","image":"4 PIC_HighestDeck_Radar4_00000.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-4624.51","y":"-1797.39","z":"-564.04"},"infoHoverText":"HighestDeck Radar2"}]},{"sceneName":"69","image":"69 PIC_BERGEBULK_00000 Also linked to 1.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-2361.37","y":"4382.49","z":"-408.43"},"infoHoverText":"HighestDeck"}]}]};
+	/*$( "div.centerDiv" )
+	  .mouseenter(function() {
+		$(this).css("box-shadow","-1px -1px 11px 1px #bbbbbb");
+	  })
+	  .mouseleave(function() {
+		$(this).css("box-shadow","-1px -1px 11px 1px #444444");
+	  });*/
+	  
+	
+
+	var dataJson = {"scenes":[{"sceneName":"1","image":"1 PIC_HighestDeck_Radar5_00000.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-4079.22","y":"-2384.44","z":"-1609.02"},"infoHoverText":"HighestDeck Radar2"},{"infoPointsName":"69","infoPointsCoordinates":{"x":"2279.56","y":"-4444.91","z":"-161.72"},"infoHoverText":"BERGEBULK"}]},{"sceneName":"2","image":"2 PIC_HighestDeck_Radar2_00000.jpg","infoPoints":[{"infoPointsName":"1","infoPointsCoordinates":{"x":"-3793.74","y":"-1796.61","z":"-2707.11"},"infoHoverText":"HighestDeck"},{"infoPointsName":"3","infoPointsCoordinates":{"x":"-69.59","y":"-1336.17","z":"4810.56"},"infoHoverText":"HighestDeck Radar"},{"infoPointsName":"4","infoPointsCoordinates":{"x":"3407.91","y":"-1048.01","z":"3491.85"},"infoHoverText":"HighestDeck Radar4"}]},{"sceneName":"3","image":"3 PIC_HighestDeck_Radar_00000.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-2120.68","y":"-1185.78","z":"4362.70"},"infoHoverText":"HighestDeck Radar2"}]},{"sceneName":"4","image":"4 PIC_HighestDeck_Radar4_00000.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-4624.51","y":"-1797.39","z":"-564.04"},"infoHoverText":"HighestDeck Radar2"}]},{"sceneName":"69","image":"69 PIC_BERGEBULK_00000 Also linked to 1.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-2361.37","y":"4382.49","z":"-408.43"},"infoHoverText":"HighestDeck"}]}]};
 
 	var loadingLabel = document.getElementById('LoadingLabelId');
 	var progress;
@@ -57,26 +113,77 @@
 	
 	var progressElement = document.getElementById( 'progress' );
 
+	function LinkTo360View()
+	{
+		$(".centerDiv").css("display","none");
+		var shipDeck = new ShipDeck();
+		shipDeck.initialize(dataJson);
+		$(".panolens-container").append('<img onclick="CloseClickFunction()" src="Logo/close.png" style="position:absolute;cursor:pointer;top:10px;right:10px;width:25px;">');
+	}
+	
+	function CloseClickFunction()
+	{
+		$(".panolens-container").remove();
+		$(".centerDiv").css("display","block");
+		audio.pause();
+		audio.stop();
+	}
+
     function onEnter ( event ) {
 		//loadingLabel.style.display = "block";
         progressElement.style.width = 0;
         progressElement.classList.remove( 'finish' );
-    }
+	}
+	
 
     function onProgress ( event ) {
-
+		console.log()
         progress = event.progress.loaded / event.progress.total * 100;
         progressElement.style.width = progress + '%';
         if ( progress === 100 ) {
-          progressElement.classList.add( 'finish' );
+			try{
+				source.src = "./Audio/"+event.target.name+".mp3";
+				audio.load(); 
+				audio.play();
+			}
+			catch(e)
+			{
+				console.log("Error : "+e)
+			}
+			
+            progressElement.classList.add( 'finish' );
 		  //loadingLabel.style.display = "none";
         }
     }
 	
+	function checkWindowSize()
+	{
+		if($( window ).width() < 500)
+		{
+			$(".link4").css("display","none");
+			$(".link3").css("top","53%");
+			$(".link3").css("left","66%");
+		  
+		}
+		else
+		{
+			$(".link4").css("display","block");
+			$(".link3").css("top","37%");
+			$(".link3").css("left","56%");
+		}
+	}
+	
 	function docOnload()
 	{
-		var shipDeck = new ShipDeck();
-		shipDeck.initialize(dataJson);
+		checkWindowSize();
+		$( window ).resize(function() {
+		  console.log("Width : "+$( window ).width());
+		  console.log("height : "+$( window ).height());
+		  checkWindowSize();
+		});
+	
+	
+		
 	
 		document.addEventListener('keydown', function(event) {
 			const key = event.key; // Or const {key} = event; in ES6+
@@ -101,8 +208,8 @@
 		if(pano.name == "1" || pano.name == "2")
 		{
 			source.src = "./Audio/"+pano.name+".mp3";
-			//audio.load(); 
-			//audio.play();
+			audio.load(); 
+			audio.play();
 		}
 	}
 	function requestOrientation()
@@ -126,6 +233,5 @@
 	
 	
 </script>
-
 </body>
 </html>
