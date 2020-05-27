@@ -4297,7 +4297,7 @@ function EnableFullScreen(isFullscreen)
 	        spot.addEventListener( 'click', function () {
 				$(".panolens-infospot").css("display","none");
 				//document.getElementsByClassName("panolens-infospot").style.display = "none";
-				ClickToNextPanoImage(pano);
+				//ClickToNextPanoImage(pano);
 	            /**
 	             * Viewer handler event
 	             * @type {object}

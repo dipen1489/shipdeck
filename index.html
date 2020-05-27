@@ -127,29 +127,52 @@
 		$(".centerDiv").css("display","block");
 		audio.pause();
 	}
+	
+	var LoadedPanoramas = [];
 
     function onEnter ( event ) {
 		//loadingLabel.style.display = "block";
         progressElement.style.width = 0;
         progressElement.classList.remove( 'finish' );
+		if(LoadedPanoramas.includes(event.target.name))
+		{
+			PlayAudio(event.target.name);
+		}
 	}
 	
-
-    function onProgress ( event ) {
-		console.log()
-        progress = event.progress.loaded / event.progress.total * 100;
-        progressElement.style.width = progress + '%';
-        if ( progress === 100 ) {
-			try{
-				source.src = "./Audio/"+event.target.name+".mp3";
+	var isFirstTime = false;
+	
+	function PlayAudio(audioName)
+	{
+		try{
+				source.src = "./Audio/"+audioName+".mp3";
 				audio.load(); 
 				audio.play();
+				isFirstTime = true;
 			}
 			catch(e)
 			{
 				console.log("Error : "+e)
 			}
-			
+	}
+
+    function onProgress ( event ) {
+        progress = event.progress.loaded / event.progress.total * 100;
+        progressElement.style.width = progress + '%';
+        if ( progress === 100 ) {
+			if(LoadedPanoramas.length == 0)
+			{
+				LoadedPanoramas.push(event.target.name);
+				PlayAudio(event.target.name);
+			}
+			else
+			{
+				if(!LoadedPanoramas.includes(event.target.name))
+				{
+					LoadedPanoramas.push(event.target.name);
+					PlayAudio(event.target.name);
+				}
+			}
             progressElement.classList.add( 'finish' );
 		  //loadingLabel.style.display = "none";
         }
