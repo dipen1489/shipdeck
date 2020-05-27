@@ -7979,6 +7979,7 @@ function EnableFullScreen(isFullscreen)
 	         * @property {MODES} mode - Current display mode
 	         */
 	        this.dispatchEvent( { type: 'mode-change', mode: this.mode } );
+			isFullscreen = false;
 			this.widget.EnableDisableFullScreen();
 	    },
 
@@ -7989,7 +7990,7 @@ function EnableFullScreen(isFullscreen)
 	     */
 	    disableEffect: function () {
 			this.enableControl(0);
-			this.widget.EnableDisableFullScreen();
+			
 	        if ( this.mode === MODES.NORMAL ) { return; }
 
 	        this.mode = MODES.NORMAL;
@@ -8015,7 +8016,8 @@ function EnableFullScreen(isFullscreen)
 	         * @property {MODES} mode - Current display mode
 	         */
 	        this.dispatchEvent( { type: 'mode-change', mode: this.mode } );
-			
+			isFullscreen = true;
+			this.widget.EnableDisableFullScreen();
 	    },
 
 	    /**
