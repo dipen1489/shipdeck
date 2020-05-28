@@ -50,12 +50,13 @@
 	<script src='./js/three.min.js'></script>
 	<script src='./js/panolens.js?n=1'></script>
 	<script src='./js/main.js'></script>
+	<script src='./js/data.js'></script>
 </head>
 <body onload="docOnload()" >
 
 
 
-<div class="centerDiv" style="position:absolute;top:0px;left:0px;width:100%;height:100%;z-index:1">
+<div class="centerDiv" style="position:absolute;top:0px;left:0px;width:100%;height:100%;z-index:1"> <!-- Make zindex : 1 for normal working>
 	<!-- <img src="Logo/shipdeck.jpg" style="position:absolute;top:0px;left:0px;width:100%;height:100%;"> -->
 	<img src="Logo/logo.png" style="position:absolute;top:20px;left:20px;width:170px;">
 	
@@ -102,10 +103,6 @@
 		$(this).css("box-shadow","-1px -1px 11px 1px #444444");
 	  });*/
 	  
-	
-
-	var dataJson = {"scenes":[{"sceneName":"1","image":"1 PIC_HighestDeck_Radar5_00000.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-4079.22","y":"-2384.44","z":"-1609.02"},"infoHoverText":"HighestDeck Radar2"},{"infoPointsName":"69","infoPointsCoordinates":{"x":"2279.56","y":"-4444.91","z":"-161.72"},"infoHoverText":"BERGEBULK"}]},{"sceneName":"2","image":"2 PIC_HighestDeck_Radar2_00000.jpg","infoPoints":[{"infoPointsName":"1","infoPointsCoordinates":{"x":"-3793.74","y":"-1796.61","z":"-2707.11"},"infoHoverText":"HighestDeck"},{"infoPointsName":"3","infoPointsCoordinates":{"x":"-69.59","y":"-1336.17","z":"4810.56"},"infoHoverText":"HighestDeck Radar"},{"infoPointsName":"4","infoPointsCoordinates":{"x":"3407.91","y":"-1048.01","z":"3491.85"},"infoHoverText":"HighestDeck Radar4"}]},{"sceneName":"3","image":"3 PIC_HighestDeck_Radar_00000.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-2120.68","y":"-1185.78","z":"4362.70"},"infoHoverText":"HighestDeck Radar2"}]},{"sceneName":"4","image":"4 PIC_HighestDeck_Radar4_00000.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-4624.51","y":"-1797.39","z":"-564.04"},"infoHoverText":"HighestDeck Radar2"}]},{"sceneName":"69","image":"69 PIC_BERGEBULK_00000 Also linked to 1.jpg","infoPoints":[{"infoPointsName":"2","infoPointsCoordinates":{"x":"-2361.37","y":"4382.49","z":"-408.43"},"infoHoverText":"HighestDeck"}]}]};
-
 	var loadingLabel = document.getElementById('LoadingLabelId');
 	var progress;
 	var audio = document.getElementById('myAudio');
@@ -197,27 +194,13 @@
 	
 	function docOnload()
 	{
+		//var shipDeck = new ShipDeck();
+		//shipDeck.initialize(dataJson);
 		checkWindowSize();
 		$( window ).resize(function() {
-		  console.log("Width : "+$( window ).width());
-		  console.log("height : "+$( window ).height());
 		  checkWindowSize();
 		});
 	
-	
-		
-	
-		document.addEventListener('keydown', function(event) {
-			const key = event.key; // Or const {key} = event; in ES6+
-			if (key === "Escape") {
-				console.log("--Escape key pressed----------");
-				if ( document.exitFullscreen ) { document.exitFullscreen(); }
-				if ( document.msExitFullscreen ) { document.msExitFullscreen(); }
-				if ( document.mozCancelFullScreen ) { document.mozCancelFullScreen(); }
-				if ( document.webkitExitFullscreen ) { document.webkitExitFullscreen(); }
-			}
-		});
-		
 		audio.onended = function() {
 			//console.log("Audio ended-----");
 		};

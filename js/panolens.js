@@ -1,5 +1,5 @@
 var isFullscreen = false;
-
+var tapSkipped = true;
 function EnableFullScreen(isFullscreen)
 {
 	if ( !isFullscreen ) {
@@ -2604,9 +2604,10 @@ function EnableFullScreen(isFullscreen)
 	 * @constructor
 	 * @param {HTMLElement} container - A domElement where default control widget will be attached to
 	 */
-	function Widget ( container ) {
+	function Widget ( Viewer ) {
+		this.viewer = Viewer;
 
-	    if ( !container ) {
+	    if ( !Viewer ) {
 
 	        console.warn( 'PANOLENS.Widget: No container specified' );
 
@@ -2621,7 +2622,7 @@ function EnableFullScreen(isFullscreen)
 	        event.stopPropagation();
 	    };
 
-	    this.container = container;
+	    this.container = Viewer.container;
 
 	    this.barElement = null;
 	    this.fullscreenElement = null;
@@ -2728,8 +2729,8 @@ function EnableFullScreen(isFullscreen)
 	            event.preventDefault();
 	            event.stopPropagation();
 
-	            scope.mask.hide();
-	            scope.settingElement.deactivate();
+	            //scope.mask.hide();
+	            //scope.settingElement.deactivate();
 
 	        }, false );
 
@@ -2897,25 +2898,22 @@ function EnableFullScreen(isFullscreen)
 				
 	            event.preventDefault();
 	            event.stopPropagation();
-	            scope.mainMenu.toggle();
-
+	            //scope.mainMenu.toggle();
+				
 	            if ( this.activated ) {
-					//requestOrientation();
 	                this.deactivate();
 
 	            } else {
-					//requestOrientation();
 	                this.activate();
 
 	            }
-
 	        }
 
 	        item = this.createCustomItem( { 
 
 	            style: { 
 
-	                backgroundImage: 'url("' + DataImage.Setting + '")',
+	                backgroundImage: 'url(Logo/vr_enable.png)',
 	                webkitTransition: this.DEFAULT_TRANSITION,
 	                transition: this.DEFAULT_TRANSITION
 
@@ -2926,14 +2924,18 @@ function EnableFullScreen(isFullscreen)
 	        } );
 
 	        item.activate = function () {
-	            this.style.transform = 'rotate3d(0,0,1,90deg)';
+	            //this.style.transform = 'rotate3d(0,0,1,90deg)';
+				this.style.backgroundImage = 'url(Logo/vr_enable.png)';
 	            this.activated = true;
 	            scope.mask.show();
+				scope.viewer.enableEffect(2);
 
 	        };
 
 	        item.deactivate = function () {
-	            this.style.transform = 'rotate3d(0,0,0,0)';
+				scope.viewer.disableEffect();
+	            //this.style.transform = 'rotate3d(0,0,0,0)';
+				this.style.backgroundImage = 'url(Logo/vr_disable.png)';
 	            this.activated = false;
 	            scope.mask.hide();
 
@@ -2958,7 +2960,9 @@ function EnableFullScreen(isFullscreen)
 				
 	        };
 
-	        item.activated = false;
+	        item.activated = true;
+			//this.activated = true;
+			//scope.viewer.enableEffect(2);
 
 	        return item;
 
@@ -2974,33 +2978,37 @@ function EnableFullScreen(isFullscreen)
 		
 		EnableDisableFullScreen: function(){
 			const { container } = this;
+			tapSkipped = false;
 			if ( !isFullscreen ) {
 
 				if ( container.requestFullscreen ) { container.requestFullscreen(); }
 				if ( container.msRequestFullscreen ) { container.msRequestFullscreen(); }
 				if ( container.mozRequestFullScreen ) { container.mozRequestFullScreen(); }
 				if ( container.webkitRequestFullscreen ) { container.webkitRequestFullscreen( Element.ALLOW_KEYBOARD_INPUT ); }
-			  
+		  
 				isFullscreen = true;
 
 			} else {
 
-				if ( document.exitFullscreen ) { document.exitFullscreen(); }
+				if ( document.exitFullscreen ) {
+					document.exitFullscreen().catch(err => {
+					  //console.log("Error attempting to enable full-screen mode");
+					});
+				}
 				if ( document.msExitFullscreen ) { document.msExitFullscreen(); }
 				if ( document.mozCancelFullScreen ) { document.mozCancelFullScreen(); }
 				if ( document.webkitExitFullscreen ) { document.webkitExitFullscreen( ); }
-
 				isFullscreen = false;
 
 			}
-
+			
 			this.fullscreenElement.style.backgroundImage = ( isFullscreen ) 
 	                ? 'url("' + DataImage.FullscreenLeave + '")' 
 	                : 'url("' + DataImage.FullscreenEnter + '")'; 
 		},
 		 
 	    createFullscreenButton: function () {
-	        let scope = this, item, /* isFullscreen = false, */ tapSkipped = true, stylesheetId;
+	        let scope = this, item, /* isFullscreen = false, */ /* tapSkipped = true, */ stylesheetId;
 
 	        const { container } = this;
 
@@ -3015,60 +3023,32 @@ function EnableFullScreen(isFullscreen)
 	        }
 
 	        function onTap ( event ) {
-
 	            event.preventDefault();
 	            event.stopPropagation();
-
-	            tapSkipped = false;
-				
-	            if ( !isFullscreen ) {
-
-	                if ( container.requestFullscreen ) { container.requestFullscreen(); }
-	                if ( container.msRequestFullscreen ) { container.msRequestFullscreen(); }
-	                if ( container.mozRequestFullScreen ) { container.mozRequestFullScreen(); }
-	                if ( container.webkitRequestFullscreen ) { container.webkitRequestFullscreen( Element.ALLOW_KEYBOARD_INPUT ); }
-	              
-	                isFullscreen = true;
-
-	            } else {
-
-	                if ( document.exitFullscreen ) { document.exitFullscreen(); }
-	                if ( document.msExitFullscreen ) { document.msExitFullscreen(); }
-	                if ( document.mozCancelFullScreen ) { document.mozCancelFullScreen(); }
-	                if ( document.webkitExitFullscreen ) { document.webkitExitFullscreen( ); }
-
-	                isFullscreen = false;
-
-	            } 
-				
-	            this.style.backgroundImage = ( isFullscreen ) 
+	            //tapSkipped = false;
+	            scope.EnableDisableFullScreen ();
+	            /* this.style.backgroundImage = ( isFullscreen ) 
 	                ? 'url("' + DataImage.FullscreenLeave + '")' 
-	                : 'url("' + DataImage.FullscreenEnter + '")';
+	                : 'url("' + DataImage.FullscreenEnter + '")'; */
 					
 	        }
 
-	        function onFullScreenChange () {
-	            if ( tapSkipped ) {
-
-	                //isFullscreen = !isFullscreen; 
-					//isFullScreenEnabled = isFullscreen;
-
-	                /* item.style.backgroundImage = ( isFullscreen ) 
-	                    ? 'url("' + DataImage.FullscreenLeave + '")' 
-	                    : 'url("' + DataImage.FullscreenEnter + '")'; */
-
-	            }
-
+	        function onFullScreenChange (eev) {
 	            /**
 	             * Viewer handler event
 	             * @type {object}
 	             * @event Widget#panolens-viewer-handler
 	             * @property {string} method - 'onWindowResize' function call on Viewer
 	             */
+				if(tapSkipped)
+				{
+					isFullscreen = !isFullscreen;
+					scope.fullscreenElement.style.backgroundImage = ( isFullscreen ) 
+	                ? 'url("' + DataImage.FullscreenLeave + '")' 
+	                : 'url("' + DataImage.FullscreenEnter + '")'; 
+				}
 	            scope.dispatchEvent( { type: 'panolens-viewer-handler', method: 'onWindowResize' } );
-
 	            tapSkipped = true;
-
 	        }
 
 	        document.addEventListener( 'fullscreenchange', onFullScreenChange, false );
@@ -7764,7 +7744,7 @@ function EnableFullScreen(isFullscreen)
 
 	        }
 
-	        const widget = new Widget( this.container );
+	        const widget = new Widget( this );
 	        widget.addEventListener( 'panolens-viewer-handler', this.eventHandler.bind( this ) );
 	        widget.addControlBar();
 	        array.forEach( buttonName => {
@@ -7971,7 +7951,6 @@ function EnableFullScreen(isFullscreen)
 	        this.effect.setSize( this.container.clientWidth, this.container.clientHeight );
 	        this.render();
 	        this.camera.fov = fov;
-
 	        /**
 	         * Dispatch mode change event
 	         * @type {object}
@@ -8732,7 +8711,6 @@ function EnableFullScreen(isFullscreen)
 	    outputPosition: function () {
 
 	        const intersects = this.raycaster.intersectObject( this.panorama, true );
-
 	        if ( intersects.length > 0 ) {
 
 	            const point = intersects[ 0 ].point.clone();
