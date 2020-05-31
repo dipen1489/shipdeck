@@ -227,6 +227,10 @@
 		var panoHome = new PANOLENS.ImagePanorama( './images/360render.jpeg' );
 		panoHome.name = "Home";
 		
+		panoHome.addEventListener( 'progress', onProgress );
+		panoHome.addEventListener( 'enter', onEnter );
+		
+		
 		viewer = new PANOLENS.Viewer({controlButtons:[], clickTolerance:0, cameraFov:80, enableReticle: false, /*output: 'console',*/ viewIndicator: true, autoRotate: false, autoRotateSpeed: 2, autoRotateActivationDuration: 5000, dwellTime: 1000 });//cameraFov zoom of camera
 		viewer.camera.position.set(300, 20, 0);
 		//viewer.getCamera().fov = 400;
