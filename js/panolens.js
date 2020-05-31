@@ -3028,7 +3028,11 @@ function EnableFullScreen(isFullscreen)
 	            event.preventDefault();
 	            event.stopPropagation();
 	            //tapSkipped = false;
-	            scope.EnableDisableFullScreen ();
+	            if(getMobileOperatingSystem() != "iOS")
+				{
+					//isFullscreen = false;
+					scope.EnableDisableFullScreen();
+				}
 	            /* this.style.backgroundImage = ( isFullscreen ) 
 	                ? 'url("' + DataImage.FullscreenLeave + '")' 
 	                : 'url("' + DataImage.FullscreenEnter + '")'; */
@@ -7907,8 +7911,11 @@ function EnableFullScreen(isFullscreen)
 	     * @instance
 	     */
 	    enableEffect: function ( mode ) {
-			isFullscreen = false;
-			this.widget.EnableDisableFullScreen();
+			if(getMobileOperatingSystem() != "iOS")
+			{
+				isFullscreen = false;
+				this.widget.EnableDisableFullScreen();	
+			}
 			
 			this.enableControl(1);
 	        if ( this.mode === mode ) { return; }

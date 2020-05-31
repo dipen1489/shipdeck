@@ -18,7 +18,10 @@ var ShipDeck = function()
 		this.CreateImagePanorama();
 		this.CreateInfoLinks();
 		//this.viewer.enableEffect(2);
-		this.viewer.widget.EnableDisableFullScreen();
+		if(getMobileOperatingSystem() != "iOS")
+		{
+			this.viewer.widget.EnableDisableFullScreen();
+		}
 	}
 	
 	this.CreateImagePanorama = function()
