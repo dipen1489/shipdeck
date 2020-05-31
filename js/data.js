@@ -1,4 +1,4 @@
-var dataJson = {
+var dataJson1 = {
     "scenes": [{
             "sceneName": "1",
             "image": "1 PIC_HighestDeck_Radar5_00000.jpg",
@@ -54,6 +54,42 @@ var dataJson = {
                     "infoPointsName": "2",
                     "infoPointsCoordinates": [-4624.51, -1797.39, -564.04],
                     "infoHoverText": "HighestDeck Radar2"
+                }
+            ]
+        }
+    ]
+};
+
+var dataJson34 = {
+    "scenes": [{
+            "sceneName": "34",
+            "image": "34 PIC_EngineRoomControlRoom_00000.jpg",
+            "infoPoints": [{
+                    "infoPointsName": "33",
+                    "infoPointsCoordinates": [2921.64, -455.73, 4029.02],
+                    "infoHoverText": "33"
+                }
+            ]
+        }, {
+            "sceneName": "33",
+            "image": "33 PIC_EngineRoomControlRoomDoor_00000.jpg",
+            "infoPoints": [/* {
+                    "infoPointsName": "340",
+                    "infoPointsCoordinates": [4040.73, 2933.23, -155.77],
+                    "infoHoverText": "340"
+                }, */{
+                    "infoPointsName": "34",
+                    "infoPointsCoordinates": [3608.70, -3439.38, 299.99],
+                    "infoHoverText": "34"
+                }
+            ]
+        },{
+            "sceneName": "35",
+            "image": "35 PIC_EngineRoomHighestRoom3_00000.jpg",
+            "infoPoints": [{
+                    "infoPointsName": "33",
+                    "infoPointsCoordinates": [2921.64, -455.73, 4029.02],
+                    "infoHoverText": "33"
                 }
             ]
         }

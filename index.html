@@ -31,8 +31,8 @@
     }
 	
 	.centerDiv{
-		background:url(Logo/shipdeck.jpg) 30% 50%;
-		background-size: cover;
+		background:url(Logo/virtualView.png) no-repeat 50% 30%;
+		#background-size: cover;
 	}
 	
 	.LinkImage{
@@ -56,11 +56,11 @@
 
 
 
-<div class="centerDiv" style="position:absolute;top:0px;left:0px;width:100%;height:100%;z-index:1"> <!-- Make zindex : 1 for normal working>
+<div class="centerDiv" style="position:absolute;top:0px;left:0px;width:100%;height:100%;z-index:-1"> <!-- Make zindex : 1 for normal working>
 	<!-- <img src="Logo/shipdeck.jpg" style="position:absolute;top:0px;left:0px;width:100%;height:100%;"> -->
 	<img src="Logo/logo.png" style="position:absolute;top:20px;left:20px;width:170px;">
 	
-	<div onclick="LinkTo360View()" align="center" class="LinkImage link1" style="top:37%;left:30%;">
+	<!-- <div onclick="LinkTo360View()" align="center" class="LinkImage link1" style="top:37%;left:30%;">
 		 <img src="Logo/360.png" style="width: 100%;height: 100%;"> 
 	</div>
 	
@@ -74,12 +74,12 @@
 	
 	<div onclick="LinkTo360View()" align="center" class="LinkImage link4" style="top: 24%;left: 86%;">
 		 <img src="Logo/360.png" style="width: 100%;height: 100%;"> 
-	</div>
+	</div> -->
 	
 	<!-- <div align="center" class="centerDiv" style="cursor:pointer;position:relative;margin:0 auto;top:40%;width:220px;height:110px;background:rgba(83, 83, 83, 0.3);box-shadow: -1px -1px 11px 1px #cccccc;">
 		<img src="Logo/360.png" style="width:100px;height:100px;position:absolute;top:-10px;left:60px;">
 		<label style="color:#D6D7D8;font-size:20px;position:absolute;width:200px;top:80px;left:10px;font-family:Arial">Start 360&#176; Virtual Tour</label>
-	</div> -->
+	</div>
 	
 	<!-- <div align="center" class="centerDiv" style="cursor:pointer;position:relative;margin:0 auto;top: 45%;width: 430px;height: 80px;background:rgba(83, 83, 83, 0.3);box-shadow: -1px -1px 11px 1px #cccccc;">
 		<img src="Logo/360.png" style="width:100px;height:100px;position:absolute;top:-10px;left: 10px;">
@@ -87,6 +87,10 @@
 	</div> -->
 	
 </div>
+
+<div onclick="LinkToMainView()" ontouchstart="LinkToMainView()" align="center" id="centerDivId" style="cursor:pointer;position:absolute;left:0px;top:0px;bottom:50px;right:0px;margin:auto;width:13%;height:5%;">
+	<img src="Logo/virtualView.png" style="width:100%;height:100%;position:absolute;top:0px;left:0px;">
+</div> 
 
 <div id="progress" style="width: 100%;" class="finish"></div>
 <label id="LoadingLabelId" style="position:absolute;display:none;top:40%;left:30%;font-size:40px;color:#eeeeee;z-index:1;">Loading page, Please wait...</label>
@@ -107,12 +111,20 @@
 	var progress;
 	var audio = document.getElementById('myAudio');
 	var source = document.getElementById('audioSource');
+	var viewer ;
 	
 	var progressElement = document.getElementById( 'progress' );
 
-	function LinkTo360View()
+	function LinkToMainView()
 	{
-		$(".centerDiv").css("display","none");
+		LinkTo360View(dataJson1);
+	}
+
+	function LinkTo360View(dataJson)
+	{
+		$("#centerDivId").fadeOut();
+		viewer.dispose();
+		$(".panolens-container").remove();
 		var shipDeck = new ShipDeck();
 		shipDeck.initialize(dataJson);
 		$(".panolens-container").append('<img ontouchstart="CloseClickFunction()" onclick="CloseClickFunction()" src="Logo/close.png" style="position:absolute;cursor:pointer;top:10px;right:10px;width:20px;">');
@@ -120,19 +132,31 @@
 	
 	function CloseClickFunction()
 	{
+		$("#centerDivId").fadeIn();
+		console.log("--------CloseClickFunction------------");
+		viewer.dispose();
 		$(".panolens-container").remove();
-		$(".centerDiv").css("display","block");
 		audio.pause();
+		TestTour();
 	}
 	
 	var LoadedPanoramas = [];
 
     function onEnter ( event ) {
 		//loadingLabel.style.display = "block";
+		if(event.target.name == "Home")
+		{
+			$("#centerDivId").fadeIn();
+		}
+		else
+		{
+			$("#centerDivId").fadeOut();
+		}
         progressElement.style.width = 0;
         progressElement.classList.remove( 'finish' );
 		if(LoadedPanoramas.includes(event.target.name))
 		{
+			console.log("-----onEnter---------");
 			PlayAudio(event.target.name);
 		}
 	}
@@ -142,24 +166,33 @@
 	function PlayAudio(audioName)
 	{
 		try{
-				source.src = "./Audio/"+audioName+".mp3";
-				audio.load(); 
-				audio.play();
-				isFirstTime = true;
-			}
-			catch(e)
-			{
-				console.log("Error : "+e)
-			}
+			source.src = "./Audio/"+audioName+".mp3";
+			//audio.load(); 
+			//audio.play();
+			isFirstTime = true;
+		}
+		catch(e)
+		{
+			console.log("Error : "+e)
+		}
 	}
 
     function onProgress ( event ) {
+		if(event.target.name == "Home")
+		{
+			$("#centerDivId").fadeIn();
+		}
+		else
+		{
+			$("#centerDivId").fadeOut();
+		}
         progress = event.progress.loaded / event.progress.total * 100;
         progressElement.style.width = progress + '%';
         if ( progress === 100 ) {
 			if(LoadedPanoramas.length == 0)
 			{
 				LoadedPanoramas.push(event.target.name);
+				console.log("-----onProgress-----if----");
 				PlayAudio(event.target.name);
 			}
 			else
@@ -167,6 +200,7 @@
 				if(!LoadedPanoramas.includes(event.target.name))
 				{
 					LoadedPanoramas.push(event.target.name);
+					console.log("-----onProgress----else-----");
 					PlayAudio(event.target.name);
 				}
 			}
@@ -179,17 +213,73 @@
 	{
 		if($( window ).width() < 500)
 		{
-			$(".link4").css("display","none");
-			$(".link3").css("top","53%");
-			$(".link3").css("left","66%");
+			$("#centerDivId").css("width","35%");
 		  
 		}
 		else
 		{
-			$(".link4").css("display","block");
-			$(".link3").css("top","37%");
-			$(".link3").css("left","56%");
+			$("#centerDivId").css("width","13%");
 		}
+	}
+	
+	function TestTour()
+	{
+		var panoHome = new PANOLENS.ImagePanorama( 'images/360render.jpeg' );
+		panoHome.name = "Home";
+		
+		viewer = new PANOLENS.Viewer({controlButtons:[], clickTolerance:0, cameraFov:80, enableReticle: false, /*output: 'console',*/ viewIndicator: true, autoRotate: false, autoRotateSpeed: 2, autoRotateActivationDuration: 5000, dwellTime: 1000 });//cameraFov zoom of camera
+		viewer.camera.position.set(300, 20, 0);
+		//viewer.getCamera().fov = 400;
+		
+		
+		//panoHome.link( pano34, new THREE.Vector3(3953.65, -2115.20, 2197.06) , 350 , "Logo/EngineControlRoom.png" , "");
+		
+		var infospot11 = new PANOLENS.Infospot( 350, "Logo/EngineControlRoom.png" );
+        infospot11.position.set( 3953.65, -2115.20, 2197.06 );
+		infospot11.addEventListener( 'click', function(){
+			LinkTo360View(dataJson34);
+		});
+		infospot11.addEventListener( 'touchstart', function(){
+			LinkTo360View(dataJson34);
+		});
+		panoHome.add(infospot11);
+		
+		
+		var infospot1 = new PANOLENS.Infospot( 350, "Logo/EngineRoom.png" );
+        infospot1.position.set( 3336.85, -1906.91, 3190.40 );
+		panoHome.add(infospot1);
+		
+		var infospot2 = new PANOLENS.Infospot( 350, "Logo/OfficerCabin.png" );
+        infospot2.position.set( 3835.54, -1627.99, 2756.81 );
+		panoHome.add(infospot2);
+		
+		var infospot3 = new PANOLENS.Infospot( 350, "Logo/NavigationBridge.png" );
+        infospot3.position.set(3568.75, -1247.79, 3265.43 );
+		panoHome.add(infospot3);
+		
+		var infospot4 = new PANOLENS.Infospot( 350, "Logo/HighestDeckRadar.png" );
+        infospot4.position.set(4150.40, -1197.74, 2507.67 );
+		/*infospot4.addEventListener( 'click', function(){
+			LinkTo360View(dataJson1);
+		});
+		infospot4.addEventListener( 'touchstart', function(){
+			LinkTo360View(dataJson1);
+		});*/
+		panoHome.add(infospot4);
+		
+		viewer.add( panoHome );
+		
+		//panoHome.link( pano45, new THREE.Vector3(3336.85, -1906.91, 3190.40) , 350 , "Logo/EngineRoom.png" , "");
+		//panoHome.link( pano18, new THREE.Vector3(3835.54, -1627.99, 2756.81) , 350 , "Logo/OfficerCabin.png" , "");
+		//panoHome.link( pano9, new THREE.Vector3(3781.77, -1249.92, 3007.87) , 350 , "Logo/NavigationBridge.png" , "");
+		//panoHome.link( pano1, new THREE.Vector3(4150.40, -1197.74, 2507.67) , 350 , "Logo/HighestDeckRadar.png" , "");
+		
+		
+		//pano34.link( pano33, new THREE.Vector3(2921.64, -455.73, 4029.02) , 600);
+		//pano33.link( pano34, new THREE.Vector3(3626.83, -3419.94, 296.87) , 600);
+		
+		$(".panolens-container").append('<img id="closeButtonId" ontouchstart="CloseClickFunction()" onclick="CloseClickFunction()" src="Logo/close.png" style="position:absolute;cursor:pointer;top:10px;right:10px;width:20px;display:none;">');
+		
 	}
 	
 	function docOnload()
@@ -200,6 +290,14 @@
 		$( window ).resize(function() {
 		  checkWindowSize();
 		});
+		
+		TestTour();
+		
+		
+		//panoHome.addEventListener( 'progress', onProgress );
+		//panoHome.addEventListener( 'enter', onEnter );
+		
+		
 	
 		audio.onended = function() {
 			//console.log("Audio ended-----");
@@ -208,14 +306,22 @@
 	
 	function ClickToNextPanoImage(pano)
 	{
+		//$("#closeButtonId").css("display","block");
+		
+		//if(pano.name == "1")
+		//{
+			//LinkTo360View(dataJson1);
+		//}
+	
+		//$(".panolens-container").append('<img ontouchstart="CloseClickFunction()" onclick="CloseClickFunction()" src="Logo/close.png" style="position:absolute;cursor:pointer;top:10px;right:10px;width:20px;">');
 		//console.log("-------------------pano-------------");
 		//console.log(pano);
-		if(pano.name == "1" || pano.name == "2")
+		/*if(pano.name == "1" || pano.name == "2")
 		{
 			source.src = "./Audio/"+pano.name+".mp3";
 			audio.load(); 
 			audio.play();
-		}
+		}*/
 	}
 	
 	function getMobileOperatingSystem() {
@@ -238,9 +344,9 @@
 		return "unknown";
 	}
 	
-	
 	function requestOrientation()
 	{
+		console.log("--------requestOrientation-----------------");
 		if (typeof DeviceMotionEvent.requestPermission === 'function') {
 	    DeviceMotionEvent.requestPermission()
 		.then(response => {
