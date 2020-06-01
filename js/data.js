@@ -73,13 +73,13 @@ var dataJson34 = {
         }, {
             "sceneName": "33",
             "image": "33 PIC_EngineRoomControlRoomDoor_00000.jpg",
-            "infoPoints": [/* {
-                    "infoPointsName": "340",
-                    "infoPointsCoordinates": [4040.73, 2933.23, -155.77],
-                    "infoHoverText": "340"
-                }, */{
+            "infoPoints": [{
+                    "infoPointsName": "35",
+                    "infoPointsCoordinates": [-456222.95, -1094.87, -1701.28],
+                    "infoHoverText": "35"
+                },{
                     "infoPointsName": "34",
-                    "infoPointsCoordinates": [3608.70, -3439.38, 299.99],
+                    "infoPointsCoordinates": [3184.34, -3839.00, 305.51],
                     "infoHoverText": "34"
                 }
             ]

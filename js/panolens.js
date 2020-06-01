@@ -2664,7 +2664,7 @@ function EnableFullScreen(isFullscreen)
 
 	        bar = document.createElement( 'div' );
 	        bar.style.width = '100%';
-	        bar.style.height = '70px';
+	        bar.style.height = '100%';
 	        bar.style.float = 'left';
 	        bar.style.transform = bar.style.webkitTransform = bar.style.msTransform = 'translateY(-100%)';
 	        bar.style.background = '-webkit-' + gradientStyle;
@@ -2909,22 +2909,46 @@ function EnableFullScreen(isFullscreen)
 	            CloseClickFunction();
 	        }
 			
+			var topPx = "40px";
 			
-			item = document.createElement( 'span' );
+			if(getMobileOperatingSystem() != "iOS")
+			{
+				topPx = "20px";
+			}
+			
+			item = this.createCustomItem( { 
+
+	            style: { 
+
+	                backgroundImage: 'url("' + DataImage.Close + '")',
+					width: '34px',
+					backgroundPosition: 'right top',
+					top: topPx,
+					right: '20px',
+					position: 'absolute'
+
+	            },
+
+	            onTap: onTap
+
+	        } );
+			
+			
+			/* item = document.createElement( 'span' );
 			item.style.backgroundImage=  'url("' + DataImage.Close + '")';
 			item.style.cursor = 'pointer';
 			item.style.position = 'absolute';
 			item.style.top = '10px';
 			item.style.right = '10px';
-			item.style.width = '20px';
+			item.style.width = '24px';
 			
 			$(".panolens-container").append(item);
 			
 			item.addEventListener("mousedown", onTap, {passive : false});
-		    item.addEventListener("touchstart", onTap , {passive : false});
+		    item.addEventListener("touchstart", onTap , {passive : false}); */
 			
 			
-			return "";
+			return item;
 		},
 
 	    /**
@@ -2950,6 +2974,13 @@ function EnableFullScreen(isFullscreen)
 
 	            }
 	        }
+			
+			var rightPx = "20px";
+			
+			if(getMobileOperatingSystem() != "iOS")
+			{
+				rightPx = "60px";
+			}
 
 	        item = this.createCustomItem( { 
 
@@ -2957,7 +2988,11 @@ function EnableFullScreen(isFullscreen)
 
 	                backgroundImage: 'url("' + DataImage.Vr_Disable + '")',
 	                webkitTransition: this.DEFAULT_TRANSITION,
-	                transition: this.DEFAULT_TRANSITION
+	                transition: this.DEFAULT_TRANSITION,
+					right: rightPx,
+					bottom: '20px',
+					backgroundPosition: 'right bottom',
+					position: 'absolute'
 
 	            },
 
@@ -3108,7 +3143,11 @@ function EnableFullScreen(isFullscreen)
 
 	            style: { 
 
-	                backgroundImage: 'url("' + DataImage.FullscreenEnter + '")' 
+	                backgroundImage: 'url("' + DataImage.FullscreenEnter + '")',
+					right: '20px',
+					bottom: '20px',
+					backgroundPosition: 'right bottom',
+					position: 'absolute'
 
 	            },
 
@@ -3819,14 +3858,14 @@ function EnableFullScreen(isFullscreen)
 	        item.style.cursor = 'pointer';
 	        item.style.float = 'right';
 	        item.style.width = '44px';
-	        item.style.height = '100%';
+	        item.style.height = '44px';
 	        item.style.backgroundSize = '60%';
 	        item.style.backgroundRepeat = 'no-repeat';
-	        item.style.backgroundPosition = 'center';
+	        item.style.backgroundPosition = 
 	        item.style.webkitUserSelect = 
 			item.style.MozUserSelect = 
 			item.style.userSelect = 'none';
-	        item.style.position = 'relative';
+	        item.style.position = 
 	        item.style.pointerEvents = 'auto';
 			//item.style.right = '50px';
 
@@ -4325,7 +4364,7 @@ function EnableFullScreen(isFullscreen)
 	        spot.addEventListener( 'click', function () {
 				$(".panolens-infospot").css("display","none");
 				//document.getElementsByClassName("panolens-infospot").style.display = "none";
-				//ClickToNextPanoImage(pano);
+				ClickToNextPanoImage(pano);
 	            /**
 	             * Viewer handler event
 	             * @type {object}
@@ -4340,7 +4379,6 @@ function EnableFullScreen(isFullscreen)
 	        this.linkedSpots.push( spot );
 
 	        this.add( spot );
-			console.log(spot);
 
 	        this.visible = false;
 
@@ -7507,7 +7545,7 @@ function EnableFullScreen(isFullscreen)
 
 	    options = options || {};
 	    options.controlBar = options.controlBar !== undefined ? options.controlBar : true;
-	    options.controlButtons = options.controlButtons || [ 'fullscreen', 'setting', 'video' ];
+	    options.controlButtons = options.controlButtons || [ 'fullscreen', 'setting', 'video' , 'close' ];
 	    options.autoHideControlBar = options.autoHideControlBar !== undefined ? options.autoHideControlBar : false;
 	    options.autoHideInfospot = options.autoHideInfospot !== undefined ? options.autoHideInfospot : true;
 	    options.horizontalView = options.horizontalView !== undefined ? options.horizontalView : false;

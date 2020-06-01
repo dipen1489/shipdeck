@@ -88,14 +88,14 @@
 	
 </div>
 
-<div onclick="LinkToMainView()" ontouchstart="LinkToMainView()" align="center" id="centerDivId" style="cursor:pointer;position:absolute;left:0px;top:0px;bottom:50px;right:0px;margin:auto;width:13%;height:5%;">
+<!-- <div onclick="LinkToMainView()" ontouchstart="LinkToMainView()" align="center" id="centerDivId" style="cursor:pointer;position:absolute;left:0px;top:0px;bottom:50px;right:0px;margin:auto;width:13%;height:5%;">
 	<img src="Logo/virtualView.png" style="width:100%;height:100%;position:absolute;top:0px;left:0px;">
-</div> 
+</div>  -->
 
 <div id="progress" style="width: 100%;" class="finish"></div>
 <label id="LoadingLabelId" style="position:absolute;display:none;top:40%;left:30%;font-size:40px;color:#eeeeee;z-index:1;">Loading page, Please wait...</label>
 <audio id="myAudio">
-	<source id="audioSource" src="Audio/1.mp3" type="audio/mpeg"/>
+	<source id="audioSource" type="audio/mpeg"/>
 </audio>
 
 <script>
@@ -122,18 +122,18 @@
 
 	function LinkTo360View(dataJson)
 	{
-		$("#centerDivId").fadeOut();
+		//$("#centerDivId").fadeOut();
 		viewer.dispose();
 		$(".panolens-container").remove();
 		var shipDeck = new ShipDeck();
 		shipDeck.initialize(dataJson);
-		$(".panolens-container").append('<img ontouchstart="CloseClickFunction()" onclick="CloseClickFunction()" src="Logo/close.png" style="position:absolute;cursor:pointer;top:10px;right:10px;width:20px;">');
+		//$(".panolens-container").append('<img ontouchstart="CloseClickFunction()" onclick="CloseClickFunction()" src="Logo/close.png" style="position:absolute;cursor:pointer;top:10px;right:10px;width:20px;">');
 	}
 	
 	function CloseClickFunction()
 	{
-		$("#centerDivId").fadeIn();
-		console.log("--------CloseClickFunction------------");
+		//$("#centerDivId").fadeIn();
+		console.info("--------CloseClickFunction------------");
 		viewer.dispose();
 		$(".panolens-container").remove();
 		audio.pause();
@@ -144,20 +144,12 @@
 
     function onEnter ( event ) {
 		//loadingLabel.style.display = "block";
-		if(event.target.name == "Home")
-		{
-			$("#centerDivId").fadeIn();
-		}
-		else
-		{
-			$("#centerDivId").fadeOut();
-		}
         progressElement.style.width = 0;
         progressElement.classList.remove( 'finish' );
 		if(LoadedPanoramas.includes(event.target.name))
 		{
-			console.log("-----onEnter---------");
-			PlayAudio(event.target.name);
+			//console.info("-----onEnter---------");
+			//PlayAudio(event.target.name);
 		}
 	}
 	
@@ -165,43 +157,49 @@
 	
 	function PlayAudio(audioName)
 	{
+		//console.info("audioName : "+audioName)
 		try{
-			source.src = "./Audio/"+audioName+".mp3";
+		
+			//audio = document.createElement("AUDIO");
+
+		  if (audio.canPlayType("audio/mpeg")) {
+				audio.setAttribute("src","Audio/"+audioName+".mp3");
+				setTimeout(function(){ audio.play(); }, 1000);
+				
+		  }
+		  else
+		  {
+			//console.info("-----format not supported--------");
+		  }
+		
+			//source.src = "Audio/"+audioName+".mp3";
 			//audio.load(); 
 			//audio.play();
 			isFirstTime = true;
 		}
 		catch(e)
 		{
-			console.log("Error : "+e)
+			console.info("Error : "+e)
 		}
 	}
 
     function onProgress ( event ) {
-		if(event.target.name == "Home")
-		{
-			$("#centerDivId").fadeIn();
-		}
-		else
-		{
-			$("#centerDivId").fadeOut();
-		}
         progress = event.progress.loaded / event.progress.total * 100;
         progressElement.style.width = progress + '%';
         if ( progress === 100 ) {
 			if(LoadedPanoramas.length == 0)
 			{
 				LoadedPanoramas.push(event.target.name);
-				console.log("-----onProgress-----if----");
-				PlayAudio(event.target.name);
+				//console.info("-----onProgress-----if----");
+				//PlayAudio(event.target.name);
 			}
 			else
 			{
 				if(!LoadedPanoramas.includes(event.target.name))
 				{
 					LoadedPanoramas.push(event.target.name);
-					console.log("-----onProgress----else-----");
-					PlayAudio(event.target.name);
+					//console.info("-----onProgress----else-----");
+					//PlayAudio(event.target.name);
 				}
 			}
             progressElement.classList.add( 'finish' );
@@ -211,27 +209,15 @@
 	
 	function checkWindowSize()
 	{
-		if($( window ).width() < 500)
-		{
-			$("#centerDivId").css("width","35%");
-		  
-		}
-		else
-		{
-			$("#centerDivId").css("width","13%");
-		}
+
 	}
 	
 	function TestTour()
 	{
-		var panoHome = new PANOLENS.ImagePanorama( './images/360render.jpeg' );
+		var panoHome = new PANOLENS.ImagePanorama( 'images/360render.jpeg' );
 		panoHome.name = "Home";
 		
-		panoHome.addEventListener( 'progress', onProgress );
-		panoHome.addEventListener( 'enter', onEnter );
-		
-		
-		viewer = new PANOLENS.Viewer({controlButtons:[], clickTolerance:0, cameraFov:80, enableReticle: false, /*output: 'console',*/ viewIndicator: true, autoRotate: false, autoRotateSpeed: 2, autoRotateActivationDuration: 5000, dwellTime: 1000 });//cameraFov zoom of camera
+		viewer = new PANOLENS.Viewer({controlButtons:[], clickTolerance:0, cameraFov:80, enableReticle: false, /* output: 'console', */ viewIndicator: true, autoRotate: false, autoRotateSpeed: 2, autoRotateActivationDuration: 5000, dwellTime: 1000 });//cameraFov zoom of camera
 		viewer.camera.position.set(300, 20, 0);
 		//viewer.getCamera().fov = 400;
 		
@@ -242,11 +228,23 @@
         infospot11.position.set( 3953.65, -2115.20, 2197.06 );
 		infospot11.addEventListener( 'click', function(){
 			LinkTo360View(dataJson34);
+			PlayAudio("34");
 		});
 		infospot11.addEventListener( 'touchstart', function(){
 			LinkTo360View(dataJson34);
+			PlayAudio("34");
 		});
 		panoHome.add(infospot11);
+		
+		var infospot12 = new PANOLENS.Infospot( 400, "Logo/virtualView.png" );
+        infospot12.position.set( 4984.02, -125.98, 210.40 );
+		infospot12.addEventListener( 'click', function(){
+			LinkTo360View(dataJson1);
+		});
+		infospot12.addEventListener( 'touchstart', function(){
+			LinkTo360View(dataJson1);
+		});
+		panoHome.add(infospot12);
 		
 		
 		var infospot1 = new PANOLENS.Infospot( 350, "Logo/EngineRoom.png" );
@@ -290,10 +288,10 @@
 	{
 		//var shipDeck = new ShipDeck();
 		//shipDeck.initialize(dataJson);
-		checkWindowSize();
-		$( window ).resize(function() {
-		  checkWindowSize();
-		});
+		//checkWindowSize();
+		//$( window ).resize(function() {
+		  //checkWindowSize();
+		//});
 		
 		TestTour();
 		
@@ -303,13 +301,23 @@
 		
 		
 	
-		audio.onended = function() {
-			//console.log("Audio ended-----");
+		/*audio.onended = function() {
+			console.info("Audio ended-----");
 		};
+		
+		audio.onloaded = function() {
+			console.info("Audio onloaded-----");
+		};
+		
+		audio.onloadeddata  = function() {
+			console.info("Audio onloadeddata -----");
+		};*/
 	}
 	
 	function ClickToNextPanoImage(pano)
 	{
+		console.info("pano.name : "+pano.name);
+		PlayAudio(pano.name);
 		//$("#closeButtonId").css("display","block");
 		
 		//if(pano.name == "1")
