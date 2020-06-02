@@ -61,16 +61,11 @@ var dataJson1 = {
 };
 
 var dataJson34 = {
-    "scenes": [{
-            "sceneName": "34",
-            "image": "34 PIC_EngineRoomControlRoom_00000.jpg",
-            "infoPoints": [{
-                    "infoPointsName": "33",
-                    "infoPointsCoordinates": [2921.64, -455.73, 4029.02],
-                    "infoHoverText": "33"
-                }
-            ]
-        }, {
+    "scenes": [ {
+            "sceneName": "32",
+            "image": "32 PIC_EngineRoomHighestFloor_00000.jpg",
+            "infoPoints": []
+        },{
             "sceneName": "33",
             "image": "33 PIC_EngineRoomControlRoomDoor_00000.jpg",
             "infoPoints": [{
@@ -83,6 +78,19 @@ var dataJson34 = {
                     "infoHoverText": "34"
                 }
             ]
+        },{
+            "sceneName": "34",
+            "image": "34 PIC_EngineRoomControlRoom_00000.jpg",
+            "infoPoints": [{
+                    "infoPointsName": "33",
+                    "infoPointsCoordinates": [2921.64, -455.73, 4029.02],
+                    "infoHoverText": "33"
+                }
+            ]
+        },{
+            "sceneName": "35",
+            "image": "35 PIC_EngineRoomHighestRoom3_00000.jpg",
+            "infoPoints": []
         }
     ]
 };

@@ -35,6 +35,8 @@ var ShipDeck = function()
 			panorama.addEventListener( 'progress', onProgress );
 			panorama.addEventListener( 'enter', onEnter );
 			this.viewer.add( panorama );
+			if(sceneObj.sceneName == "34")
+				this.viewer.setPanorama(panorama);
 			this.infoLinkdict[sceneObj.sceneName] = panorama;
 			this.PanoList.push(sceneObj.sceneName);
 		}

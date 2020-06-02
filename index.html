@@ -130,11 +130,20 @@
 	function LinkTo34Image()
 	{
 		LinkTo360View(dataJson34);
+		console.log("Length : "+shipDeck.infoLinkdict.length);
+		//currentPanoObj = shipDeck.infoLinkdict["34"];
+		//shipDeck.viewer.setPanorama(currentPanoObj);
+		//shipDeck.viewer.setPanorama(shipDeck.infoLinkdict["34"]);
+		currentPanoName = "34";
+		panoCounter = 2;
+		console.log("panoCounter : "+panoCounter);
+		PlayAudio("34");
 	}
 	
 	function LinkToMainView()
 	{
 		LinkTo360View(dataJson1);
+		PlayAudio(currentPanoName);
 	}
 
 	function LinkTo360View(dataJson)
@@ -145,7 +154,7 @@
 		$(".panolens-container").remove();
 		shipDeck = new ShipDeck();
 		shipDeck.initialize(dataJson);
-		PlayAudio(currentPanoName);
+		
 		//$(".panolens-container").append('<img ontouchstart="CloseClickFunction()" onclick="CloseClickFunction()" src="Logo/close.png" style="position:absolute;cursor:pointer;top:10px;right:10px;width:20px;">');
 	}
 	
