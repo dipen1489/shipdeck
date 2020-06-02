@@ -31,18 +31,15 @@
     }
 	
 	.centerDiv{
-		background:url(Logo/virtualView.png) no-repeat 50% 30%;
-		#background-size: cover;
+		background:url(Logo/shipdeck.jpg) no-repeat 20% 30%;
+		background-size: cover;
 	}
 	
 	.LinkImage{
 		cursor:pointer;
 		position:absolute;
-		width: 50px;
-		height: 50px;
-		background:rgba(217,0,0,0.8);
-		box-shadow: -1px -1px 11px 1px #ffffff;
-		border-radius: 70px;
+		width: 10%;
+		height: 5%;
 	}
 	
     </style>
@@ -54,27 +51,38 @@
 </head>
 <body onload="docOnload()" >
 
+<!-- .LinkImage:hover{
+		width: 14%;
+		height: 6%;
+	} -->
 
-
-<div class="centerDiv" style="position:absolute;top:0px;left:0px;width:100%;height:100%;z-index:-1"> <!-- Make zindex : 1 for normal working>
+<div id="centerDivId" class="centerDiv" style="position:absolute;top:0px;left:0px;width:100%;height:100%;z-index:1"> <!-- Make zindex : 1 for normal working>
 	<!-- <img src="Logo/shipdeck.jpg" style="position:absolute;top:0px;left:0px;width:100%;height:100%;"> -->
-	<img src="Logo/logo.png" style="position:absolute;top:20px;left:20px;width:170px;">
+	<!-- <img src="Logo/logo.png" style="position:absolute;top:20px;left:20px;width:170px;"> -->
 	
-	<!-- <div onclick="LinkTo360View()" align="center" class="LinkImage link1" style="top:37%;left:30%;">
-		 <img src="Logo/360.png" style="width: 100%;height: 100%;"> 
+	<div align="center" class="LinkImage link1" style="top:40%;left:29%;">
+		 <img src="Logo/HighestDeckRadar.png" style="width: 100%;height: 100%;"> 
 	</div>
 	
-	<div onclick="LinkTo360View()" align="center" class="LinkImage link2" style="top: 72%;left: 10%;">
-		 <img src="Logo/360.png" style="width: 100%;height: 100%;"> 
+	<div align="center" class="LinkImage link2" style="top:52%;left:32%;width:9%;">
+		 <img src="Logo/NavigationBridge.png" style="width: 100%;height: 100%;"> 
 	</div>
 	
-	<div onclick="LinkTo360View()" align="center" class="LinkImage link3" style="top:37%;left: 56%;">
-		 <img src="Logo/360.png" style="width: 100%;height: 100%;"> 
+	<div align="center" class="LinkImage link3" style="top:62%;left:29%;width:8%;">
+		 <img src="Logo/OfficerCabin.png" style="width: 100%;height: 100%;"> 
 	</div>
 	
-	<div onclick="LinkTo360View()" align="center" class="LinkImage link4" style="top: 24%;left: 86%;">
-		 <img src="Logo/360.png" style="width: 100%;height: 100%;"> 
-	</div> -->
+	  <div onclick="LinkTo34Image()" align="center" class="LinkImage link4" style="top:71%;left:32%;width:11%;">
+		 <img src="Logo/EngineControlRoom.png" style="width: 100%;height: 100%;"> 
+	</div>
+	
+	<div align="center" class="LinkImage link5" style="top:76%;left:21%;width:8%;">
+		 <img src="Logo/EngineRoom.png" style="width: 100%;height: 100%;"> 
+	</div>
+	
+	<div onclick="LinkToMainView()" align="center" class="LinkImage link6" style="top:44%;left:45%;height:4%;">
+		 <img src="Logo/virtualView.png" style="width: 100%;height: 100%;"> 
+	</div>
 	
 	<!-- <div align="center" class="centerDiv" style="cursor:pointer;position:relative;margin:0 auto;top:40%;width:220px;height:110px;background:rgba(83, 83, 83, 0.3);box-shadow: -1px -1px 11px 1px #cccccc;">
 		<img src="Logo/360.png" style="width:100px;height:100px;position:absolute;top:-10px;left:60px;">
@@ -112,9 +120,18 @@
 	var audio = document.getElementById('myAudio');
 	var source = document.getElementById('audioSource');
 	var viewer ;
+	var shipDeck;
+	var panoCounter = 0;
+	var currentPanoName;
+	var currentPanoObj;
 	
 	var progressElement = document.getElementById( 'progress' );
 
+	function LinkTo34Image()
+	{
+		LinkTo360View(dataJson34);
+	}
+	
 	function LinkToMainView()
 	{
 		LinkTo360View(dataJson1);
@@ -122,22 +139,69 @@
 
 	function LinkTo360View(dataJson)
 	{
-		//$("#centerDivId").fadeOut();
-		viewer.dispose();
+		currentPanoName = dataJson.scenes[0].sceneName;
+		$("#centerDivId").fadeOut();
+		//viewer.dispose();
 		$(".panolens-container").remove();
-		var shipDeck = new ShipDeck();
+		shipDeck = new ShipDeck();
 		shipDeck.initialize(dataJson);
+		PlayAudio(currentPanoName);
 		//$(".panolens-container").append('<img ontouchstart="CloseClickFunction()" onclick="CloseClickFunction()" src="Logo/close.png" style="position:absolute;cursor:pointer;top:10px;right:10px;width:20px;">');
+	}
+	
+	function PrevClickFunction()
+	{
+		findPanoImageFromCounter();
+		panoCounter--;
+		if(panoCounter < 0)
+		{
+			panoCounter = 0;
+			//console.log(shipDeck.viewer.widget.prevElement);
+			//console.log(shipDeck.viewer.DataImage);
+			// do nothing and disable icon
+		}
+		else
+		{
+			SetPanoToView();
+		}
+	}
+	
+	function NextClickFunction()
+	{
+		findPanoImageFromCounter();
+		panoCounter++;
+		if(panoCounter > (shipDeck.PanoList.length - 1))
+		{	
+			panoCounter = shipDeck.PanoList.length - 1;
+			
+			// do nothing and disable icon
+		}
+		else
+		{
+			SetPanoToView();
+		}
+	}
+	
+	function SetPanoToView()
+	{
+		currentPanoName = shipDeck.PanoList[panoCounter];
+		currentPanoObj = shipDeck.infoLinkdict[currentPanoName];
+		shipDeck.viewer.setPanorama(currentPanoObj);
+		PlayAudio(currentPanoName);
+	}
+	
+	function findPanoImageFromCounter()
+	{
+		panoCounter = shipDeck.PanoList.indexOf(currentPanoName);
 	}
 	
 	function CloseClickFunction()
 	{
 		//$("#centerDivId").fadeIn();
-		console.info("--------CloseClickFunction------------");
-		viewer.dispose();
 		$(".panolens-container").remove();
 		audio.pause();
-		TestTour();
+		$("#centerDivId").fadeIn();
+		//TestTour();
 	}
 	
 	var LoadedPanoramas = [];
@@ -164,8 +228,10 @@
 
 		  if (audio.canPlayType("audio/mpeg")) {
 				audio.setAttribute("src","Audio/"+audioName+".mp3");
-				setTimeout(function(){ audio.play(); }, 2000);
-				
+				setTimeout(function(){
+					if($(".panolens-container").length > 0)
+						audio.play(); 
+				}, 1500);
 		  }
 		  else
 		  {
@@ -209,7 +275,36 @@
 	
 	function checkWindowSize()
 	{
-
+		if($(window).width() < 500)
+		{
+			$(".link1").css("width","35%").css("left","52%").css("top","40%");
+			$(".link2").css("width","32%").css("left","55%").css("top","52%");
+			$(".link3").css("width","29%").css("left","48%").css("top","62%");
+			$(".link4").css("width","38%").css("left","57%").css("top","71%");
+			$(".link5").css("width","29%").css("top","76%");
+			$(".link6").css("width","35%").css("top","26%").css("left","32%");
+		}
+		else
+		{
+			if(getMobileOperatingSystem() == "Android")
+			{
+				$(".link1").css("width","10%").css("left","29%").css("top","47%");
+				$(".link2").css("width","9%").css("left","32%").css("top","59%");
+				$(".link3").css("width","8%").css("left","29%").css("top","69%");
+				$(".link4").css("width","11%").css("left","32%").css("top","78%");
+				$(".link5").css("width","8%").css("top","83%");
+				$(".link6").css("width","10%").css("top","44%").css("left","45%");
+			}
+			else
+			{
+				$(".link1").css("width","10%").css("left","29%");
+				$(".link2").css("width","9%").css("left","32%");
+				$(".link3").css("width","8%").css("left","29%");
+				$(".link4").css("width","11%").css("left","32%");
+				$(".link5").css("width","8%");
+				$(".link6").css("width","10%").css("top","44%").css("left","45%");
+			}
+		}
 	}
 	
 	function TestTour()
@@ -222,7 +317,7 @@
 		//viewer.getCamera().fov = 400;
 		
 		
-		//panoHome.link( pano34, new THREE.Vector3(3953.65, -2115.20, 2197.06) , 350 , "Logo/EngineControlRoom.png" , "");
+		
 		
 		var infospot11 = new PANOLENS.Infospot( 350, "Logo/EngineControlRoom.png" );
         infospot11.position.set( 3953.65, -2115.20, 2197.06 );
@@ -271,6 +366,7 @@
 		
 		viewer.add( panoHome );
 		
+		//panoHome.link( pano34, new THREE.Vector3(3953.65, -2115.20, 2197.06) , 350 , "Logo/EngineControlRoom.png" , "");
 		//panoHome.link( pano45, new THREE.Vector3(3336.85, -1906.91, 3190.40) , 350 , "Logo/EngineRoom.png" , "");
 		//panoHome.link( pano18, new THREE.Vector3(3835.54, -1627.99, 2756.81) , 350 , "Logo/OfficerCabin.png" , "");
 		//panoHome.link( pano9, new THREE.Vector3(3781.77, -1249.92, 3007.87) , 350 , "Logo/NavigationBridge.png" , "");
@@ -288,12 +384,12 @@
 	{
 		//var shipDeck = new ShipDeck();
 		//shipDeck.initialize(dataJson);
-		//checkWindowSize();
-		//$( window ).resize(function() {
-		  //checkWindowSize();
-		//});
+		checkWindowSize();
+		$( window ).resize(function() {
+		  checkWindowSize();
+		});
 		
-		TestTour();
+		//TestTour();
 		
 		
 		//panoHome.addEventListener( 'progress', onProgress );
@@ -316,7 +412,9 @@
 	
 	function ClickToNextPanoImage(pano)
 	{
-		console.info("pano.name : "+pano.name);
+		currentPanoName = pano.name;
+		currentPanoObj = pano;
+		//console.info("pano.name : "+pano.name);
 		PlayAudio(pano.name);
 		//$("#closeButtonId").css("display","block");
 		
@@ -358,7 +456,7 @@
 	
 	function requestOrientation()
 	{
-		console.log("--------requestOrientation-----------------");
+		//console.log("--------requestOrientation-----------------");
 		if (typeof DeviceMotionEvent.requestPermission === 'function') {
 	    DeviceMotionEvent.requestPermission()
 		.then(response => {

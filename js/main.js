@@ -10,6 +10,7 @@ var ShipDeck = function()
 	this.infoLinkdict = {};
 	this.progress;
 	this.progressElement;
+	this.PanoList = [];
 	this.initialize = function(data)
 	{
 		this.dataJson = data;
@@ -35,6 +36,7 @@ var ShipDeck = function()
 			panorama.addEventListener( 'enter', onEnter );
 			this.viewer.add( panorama );
 			this.infoLinkdict[sceneObj.sceneName] = panorama;
+			this.PanoList.push(sceneObj.sceneName);
 		}
 	}
 
