@@ -15,14 +15,20 @@ var ShipDeck = function()
 	{
 		this.dataJson = data;
 		this.progressElement = document.getElementById('progress');
-		this.viewer = new PANOLENS.Viewer({clickTolerance:0, cameraFov:100, enableReticle: false,  /* output: 'console', */ viewIndicator: true, autoRotate: false, autoRotateSpeed: 2, autoRotateActivationDuration: 5000, dwellTime: 1000 });//cameraFov zoom of camera
+		this.viewer = new PANOLENS.Viewer({clickTolerance:0, cameraFov:100, enableReticle: false,  /* output: 'console', */ viewIndicator: true, autoRotate: false, autoRotateSpeed: 2, autoRotateActivationDuration: 5000, dwellTime: 2000 });//cameraFov zoom of camera
 		this.CreateImagePanorama();
 		this.CreateInfoLinks();
 		//this.viewer.enableEffect(2);
 		if(getMobileOperatingSystem() != "iOS")
 		{
 			this.viewer.widget.EnableDisableFullScreen();
-		}	
+		}
+
+		if(getMobileOperatingSystem() != "unknown")
+		{
+			this.viewer.enableControl(1);		
+		} 
+		
 	}
 	
 	this.CreateImagePanorama = function()

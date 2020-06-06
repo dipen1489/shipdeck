@@ -48,6 +48,7 @@
 	<script src='./js/panolens.js?n=1'></script>
 	<script src='./js/main.js'></script>
 	<script src='./js/data.js'></script>
+	<script src='./js/NoSleep.js'></script>
 </head>
 <body onload="docOnload()" >
 
@@ -80,7 +81,7 @@
 		 <img src="Logo/EngineRoom.png" style="width: 100%;height: 100%;"> 
 	</div>
 	
-	<div onclick="LinkToMainView()" align="center" class="LinkImage link6" style="top:44%;left:45%;height:4%;">
+	<div onclick="LinkToMainView()" align="center" class="LinkImage link6" style="top:52%;left:48%;height:5%;">
 		 <img src="Logo/virtualView.png" style="width: 100%;height: 100%;"> 
 	</div>
 	
@@ -95,6 +96,8 @@
 	</div> -->
 	
 </div>
+
+<img src="Logo/RotatePhone.png" id="RotatePhoneImg" style="width: 100%;height: 100%;position:absolute;top:0px;left:0px;z-index:100;display:none;"> 
 
 <!-- <div onclick="LinkToMainView()" ontouchstart="LinkToMainView()" align="center" id="centerDivId" style="cursor:pointer;position:absolute;left:0px;top:0px;bottom:50px;right:0px;margin:auto;width:13%;height:5%;">
 	<img src="Logo/virtualView.png" style="width:100%;height:100%;position:absolute;top:0px;left:0px;">
@@ -114,6 +117,8 @@
 	  .mouseleave(function() {
 		$(this).css("box-shadow","-1px -1px 11px 1px #444444");
 	  });*/
+	  
+	var noSleep = new NoSleep();
 	  
 	var loadingLabel = document.getElementById('LoadingLabelId');
 	var progress;
@@ -286,6 +291,7 @@
 	{
 		if($(window).width() < 500)
 		{
+			$("#RotatePhoneImg").css("display","block");
 			$(".link1").css("width","35%").css("left","52%").css("top","40%");
 			$(".link2").css("width","32%").css("left","55%").css("top","52%");
 			$(".link3").css("width","29%").css("left","48%").css("top","62%");
@@ -295,6 +301,7 @@
 		}
 		else
 		{
+			$("#RotatePhoneImg").css("display","none");
 			if(getMobileOperatingSystem() == "Android")
 			{
 				$(".link1").css("width","10%").css("left","29%").css("top","47%");
@@ -302,7 +309,7 @@
 				$(".link3").css("width","8%").css("left","29%").css("top","69%");
 				$(".link4").css("width","11%").css("left","32%").css("top","78%");
 				$(".link5").css("width","8%").css("top","83%");
-				$(".link6").css("width","10%").css("top","44%").css("left","45%");
+				$(".link6").css("width","7%").css("top","44%").css("left","45%");
 			}
 			else
 			{
@@ -311,7 +318,7 @@
 				$(".link3").css("width","8%").css("left","29%");
 				$(".link4").css("width","11%").css("left","32%");
 				$(".link5").css("width","8%");
-				$(".link6").css("width","10%").css("top","44%").css("left","45%");
+				$(".link6").css("width","7%").css("top","52%").css("left","48%");
 			}
 		}
 	}
@@ -397,6 +404,16 @@
 		$( window ).resize(function() {
 		  checkWindowSize();
 		});
+		
+		document.addEventListener('click', function enableNoSleep() {
+			document.removeEventListener('click', enableNoSleep, false);
+			noSleep.enable();
+		}, false);
+		
+		document.addEventListener('touchstart', function enableNoSleep() {
+			document.removeEventListener('touchstart', enableNoSleep, false);
+			noSleep.enable();
+		}, false);
 		
 		//TestTour();
 		
