@@ -124,7 +124,7 @@ var InfoLinks = function()
 
 var InfoPoint = function()
 {
-	this.infoPointSize = 800;
+	this.infoPointSize = 600;
 	this.infoLinkdict = {};
 	this.initialize = function(dict , sceneName, infoLink)
 	{

@@ -2386,7 +2386,7 @@ function EnableFullScreen(isFullscreen)
 	            this.element = document.createElement( 'div' );
 	            this.element.style.display = 'none';
 	            this.element.style.color = '#fff';
-	            this.element.style.top = '-50px';
+	            this.element.style.top = '-25px';
 	            this.element.style.maxWidth = '50%';
 	            this.element.style.maxHeight = '50%';
 	            this.element.style.textShadow = '2px 2px 5px #666666';
