@@ -5,6 +5,27 @@ var coordinates = function(x,y,z)
 	this.z = z;
 }
 
+function preloadImages(urls, allImagesLoadedCallback){
+    var loadedCounter = 0;
+  var toBeLoadedNumber = urls.length;
+  urls.forEach(function(url){
+    preloadImage(url, function(){
+        loadedCounter++;
+            console.log('Number of loaded images: ' + loadedCounter);
+      if(loadedCounter == toBeLoadedNumber){
+        allImagesLoadedCallback();
+      }
+    });
+  });
+  function preloadImage(url, anImageLoadedCallback){
+      var img = new Image();
+      img.onload = anImageLoadedCallback;
+      img.src = url;
+  }
+}
+
+//var imageIconArray = [];
+
 var ShipDeck = function()
 {
 	this.infoLinkdict = {};
@@ -13,9 +34,28 @@ var ShipDeck = function()
 	this.PanoList = [];
 	this.initialize = function(data)
 	{
+		/* preloadImages("32","./Logo/32.png",function(e , f){
+			console.log("Image loaded");
+			imageIconArray["32"] = e.path[0];
+		});
+		preloadImages("33","./Logo/33.png",function(e , f){
+			console.log("Image loaded");
+			imageIconArray["33"] = e.path[0];
+		});
+		preloadImages("34","./Logo/34.png",function(e , f){
+			console.log("Image loaded");
+			imageIconArray["34"] = e.path[0];
+		});
+		preloadImages("35","./Logo/35.png",function(e , f){
+			console.log("Image loaded");
+			imageIconArray["35"] = e.path[0];
+		}); */
+		//preloadImages("33","./Logo/33.png");
+		//preloadImages("34","./Logo/34.png");
+		//preloadImages("35","./Logo/35.png");
 		this.dataJson = data;
 		this.progressElement = document.getElementById('progress');
-		this.viewer = new PANOLENS.Viewer({clickTolerance:0, cameraFov:100, enableReticle: false,  /* output: 'console', */ viewIndicator: true, autoRotate: false, autoRotateSpeed: 2, autoRotateActivationDuration: 5000, dwellTime: 2000 });//cameraFov zoom of camera
+		this.viewer = new PANOLENS.Viewer({clickTolerance:0, cameraFov:80, enableReticle: false,   output: 'console',  viewIndicator: true, autoRotate: false, autoRotateSpeed: 2, autoRotateActivationDuration: 5000, dwellTime: 2000 });//cameraFov zoom of camera
 		this.CreateImagePanorama();
 		this.CreateInfoLinks();
 		//this.viewer.enableEffect(2);
@@ -84,7 +124,7 @@ var InfoLinks = function()
 
 var InfoPoint = function()
 {
-	this.infoPointSize = 600;
+	this.infoPointSize = 800;
 	this.infoLinkdict = {};
 	this.initialize = function(dict , sceneName, infoLink)
 	{
@@ -107,6 +147,21 @@ var InfoPoint = function()
 		console.info("this.infoPointSize : "+this.infoPointSize);
 		console.info("this.HoverText : "+this.HoverText); */
 		
-		this.panorama.link( this.infoLinkdict[this.infoLink.infoPointsName], new THREE.Vector3( this.infoLink.infoPointsCoordinates[0], this.infoLink.infoPointsCoordinates[1], this.infoLink.infoPointsCoordinates[2] ) , this.infoPointSize , false , this.HoverText);
+		console.log("this.infoLink.infoPointsName : "+this.infoLink.infoPointsName);
+		var iconName = this.infoLink.infoPointsName;
+		//console.log(imageIconArray[iconName].src);
+		var imgName = "./Logo/"+iconName+".png";
+		console.log(iconName);
+		
+		//this.panorama.setLinkingImage(imgName,this.infoPointSize);
+		
+		this.panorama.link( this.infoLinkdict[iconName], new THREE.Vector3( this.infoLink.infoPointsCoordinates[0], this.infoLink.infoPointsCoordinates[1], this.infoLink.infoPointsCoordinates[2] ) , this.infoPointSize , imgName , this.HoverText);
 	}
+}
+
+function preloadImages(imageName , url , calback)
+{
+	var img=new Image();
+    img.src=url;
+	img.onload = calback;
 }

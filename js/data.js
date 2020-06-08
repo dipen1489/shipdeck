@@ -64,7 +64,11 @@ var dataJson34 = {
     "scenes": [ {
             "sceneName": "32",
             "image": "32 PIC_EngineRoomHighestFloor_00000.jpg",
-            "infoPoints": []
+            "infoPoints": [{
+                    "infoPointsName": "33",
+                    "infoPointsCoordinates": [-456222.95, -1094.87, -1701.28],
+                    "infoHoverText": "33"
+                }]
         },{
             "sceneName": "33",
             "image": "33 PIC_EngineRoomControlRoomDoor_00000.jpg",
@@ -74,7 +78,7 @@ var dataJson34 = {
                     "infoHoverText": "33"
                 },{
                     "infoPointsName": "34",
-                    "infoPointsCoordinates": [3184.34, -3839.00, 305.51],
+                    "infoPointsCoordinates": [4022.54, -2904.53, 572.01],
                     "infoHoverText": "34"
                 }
             ]
@@ -90,7 +94,11 @@ var dataJson34 = {
         },{
             "sceneName": "35",
             "image": "35 PIC_EngineRoomHighestRoom3_00000.jpg",
-            "infoPoints": []
+            "infoPoints": [{
+                    "infoPointsName": "33",
+                    "infoPointsCoordinates": [-456222.95, -1094.87, -1701.28],
+                    "infoHoverText": "33"
+                }]
         }
     ]
 };

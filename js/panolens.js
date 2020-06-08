@@ -1952,6 +1952,8 @@ function EnableFullScreen(isFullscreen)
 	    const duration = 500, scaleFactor = 1.3;
 
 	    imageSrc = imageSrc || DataImage.Info;
+		
+		//console.log("imageSrc : "+imageSrc);
 
 	    THREE.Sprite.call( this );
 
@@ -2384,14 +2386,15 @@ function EnableFullScreen(isFullscreen)
 	            this.element = document.createElement( 'div' );
 	            this.element.style.display = 'none';
 	            this.element.style.color = '#fff';
-	            this.element.style.top = '-25px';
+	            this.element.style.top = '-50px';
 	            this.element.style.maxWidth = '50%';
 	            this.element.style.maxHeight = '50%';
-	            this.element.style.textShadow = '0 0 3px #000000';
+	            this.element.style.textShadow = '2px 2px 5px #666666';
 	            this.element.style.fontFamily = '"Trebuchet MS", Helvetica, sans-serif';
 	            this.element.style.position = 'absolute';
 	            this.element.classList.add( 'panolens-infospot' );
 	            this.element.verticalDelta = delta;
+	            this.element.style.fontSize = '20px';
 
 	        }
 
@@ -8130,7 +8133,12 @@ function EnableFullScreen(isFullscreen)
 				isFullscreen = false;
 				this.widget.EnableDisableFullScreen();	
 			}
-			this.enableControl(1);
+			
+			if(getMobileOperatingSystem() != "unknown")
+			{
+				this.enableControl(1);
+			} 
+			
 	        if ( this.mode === mode ) { return; }
 	        if ( mode === MODES.NORMAL ) { this.disableEffect(); return; }
 	        else { this.mode = mode; }
