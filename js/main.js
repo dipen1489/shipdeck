@@ -54,7 +54,7 @@ var ShipDeck = function()
 		for(var i=0; i < this.dataJson.scenes.length; i++)
 		{
 			var sceneObj = this.dataJson.scenes[i];
-			var panorama = new PANOLENS.ImagePanorama("./images_original/"+sceneObj.image);
+			var panorama = new PANOLENS.ImagePanorama("./images/"+sceneObj.image);
 			panorama.name = sceneObj.sceneName;
 			panorama.addEventListener( 'progress', onProgress );
 			//panorama.setLinkingImage(imageIconArray[sceneObj.sceneName],600);
