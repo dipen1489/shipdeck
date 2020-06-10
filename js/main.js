@@ -5,26 +5,9 @@ var coordinates = function(x,y,z)
 	this.z = z;
 }
 
-function preloadImages(urls, allImagesLoadedCallback){
-    var loadedCounter = 0;
-  var toBeLoadedNumber = urls.length;
-  urls.forEach(function(url){
-    preloadImage(url, function(){
-        loadedCounter++;
-            console.log('Number of loaded images: ' + loadedCounter);
-      if(loadedCounter == toBeLoadedNumber){
-        allImagesLoadedCallback();
-      }
-    });
-  });
-  function preloadImage(url, anImageLoadedCallback){
-      var img = new Image();
-      img.onload = anImageLoadedCallback;
-      img.src = url;
-  }
-}
-
-//var imageIconArray = [];
+var imageIconArray = {};
+var infospotNameList = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,44,45,46,47,48,50,51,52,53,54,55,60,61,65,66,67,68,69,70];
+var audioFileList = [2,3,9,14,17,18,22,23,24,26,27,30,32,33,34,45,65,66,68];
 
 var ShipDeck = function()
 {
@@ -32,43 +15,38 @@ var ShipDeck = function()
 	this.progress;
 	this.progressElement;
 	this.PanoList = [];
+	this.infoPointSize = 600;
 	this.initialize = function(data)
 	{
-		/* preloadImages("32","./Logo/32.png",function(e , f){
-			console.log("Image loaded");
-			imageIconArray["32"] = e.path[0];
-		});
-		preloadImages("33","./Logo/33.png",function(e , f){
-			console.log("Image loaded");
-			imageIconArray["33"] = e.path[0];
-		});
-		preloadImages("34","./Logo/34.png",function(e , f){
-			console.log("Image loaded");
-			imageIconArray["34"] = e.path[0];
-		});
-		preloadImages("35","./Logo/35.png",function(e , f){
-			console.log("Image loaded");
-			imageIconArray["35"] = e.path[0];
-		}); */
-		//preloadImages("33","./Logo/33.png");
-		//preloadImages("34","./Logo/34.png");
-		//preloadImages("35","./Logo/35.png");
 		this.dataJson = data;
+		var count = 0;
+		var obj = this;
+		for(var i=0; i < infospotNameList.length; i++)
+		{
+			var iconName = infospotNameList[i].toString();
+			preloadImages(iconName,function(e){
+				count++;
+				imageIconArray[e.currentTarget.class] = getDataUrl(e.currentTarget);
+				if(count == infospotNameList.length)
+				{
+					console.info(infospotNameList.length);
+					obj.CreatePano();
+					
+				}
+			});
+		}
+	}
+	
+	this.CreatePano = function()
+	{
 		this.progressElement = document.getElementById('progress');
-		this.viewer = new PANOLENS.Viewer({clickTolerance:0, cameraFov:80, enableReticle: false,   output: 'console',  viewIndicator: true, autoRotate: false, autoRotateSpeed: 2, autoRotateActivationDuration: 5000, dwellTime: 2000 });//cameraFov zoom of camera
+		this.viewer = new PANOLENS.Viewer({clickTolerance:0, cameraFov:80, enableReticle: false,   /* output: 'console', */  viewIndicator: true, autoRotate: false, autoRotateSpeed: 2, autoRotateActivationDuration: 5000, dwellTime: 2000 });//cameraFov zoom of camera
 		this.CreateImagePanorama();
 		this.CreateInfoLinks();
-		//this.viewer.enableEffect(2);
-		if(getMobileOperatingSystem() != "iOS")
+		/* if(getMobileOperatingSystem() != "unknown")
 		{
-			this.viewer.widget.EnableDisableFullScreen();
-		}
-
-		if(getMobileOperatingSystem() != "unknown")
-		{
-			this.viewer.enableControl(1);		
-		} 
-		
+			//this.viewer.enableControl(1);		
+		} */ 
 	}
 	
 	this.CreateImagePanorama = function()
@@ -76,13 +54,12 @@ var ShipDeck = function()
 		for(var i=0; i < this.dataJson.scenes.length; i++)
 		{
 			var sceneObj = this.dataJson.scenes[i];
-			var panorama = new PANOLENS.ImagePanorama("./images/"+sceneObj.image);
+			var panorama = new PANOLENS.ImagePanorama("./images_original/"+sceneObj.image);
 			panorama.name = sceneObj.sceneName;
 			panorama.addEventListener( 'progress', onProgress );
+			//panorama.setLinkingImage(imageIconArray[sceneObj.sceneName],600);
 			panorama.addEventListener( 'enter', onEnter );
 			this.viewer.add( panorama );
-			if(sceneObj.sceneName == "34")
-				this.viewer.setPanorama(panorama);
 			this.infoLinkdict[sceneObj.sceneName] = panorama;
 			this.PanoList.push(sceneObj.sceneName);
 		}
@@ -138,30 +115,27 @@ var InfoPoint = function()
 	
 	this.createInfoSpot = function()
 	{
-		/* console.info( "infoPointsName : "+this.infoLink.infoPointsName );
-		console.info( "infoLinkdict : -------------------------- ");
-		console.info(this.infoLinkdict.length);
-		console.info("X : "+this.infoLink.infoPointsCoordinates[0]);
-		console.info("Y : "+this.infoLink.infoPointsCoordinates[1]);
-		console.info("Z : "+this.infoLink.infoPointsCoordinates[2]);
-		console.info("this.infoPointSize : "+this.infoPointSize);
-		console.info("this.HoverText : "+this.HoverText); */
-		
-		console.log("this.infoLink.infoPointsName : "+this.infoLink.infoPointsName);
 		var iconName = this.infoLink.infoPointsName;
-		//console.log(imageIconArray[iconName].src);
-		var imgName = "./Logo/"+iconName+".png";
-		console.log(iconName);
-		
-		//this.panorama.setLinkingImage(imgName,this.infoPointSize);
-		
-		this.panorama.link( this.infoLinkdict[iconName], new THREE.Vector3( this.infoLink.infoPointsCoordinates[0], this.infoLink.infoPointsCoordinates[1], this.infoLink.infoPointsCoordinates[2] ) , this.infoPointSize , imgName , this.HoverText);
+		this.panorama.link( this.infoLinkdict[iconName], new THREE.Vector3( this.infoLink.infoPointsCoordinates[0], this.infoLink.infoPointsCoordinates[1], this.infoLink.infoPointsCoordinates[2] ) , this.infoPointSize , imageIconArray[iconName] , this.HoverText);
 	}
 }
 
-function preloadImages(imageName , url , calback)
+function getDataUrl(img) {
+   // Create canvas
+   const canvas = document.createElement('canvas');
+   const ctx = canvas.getContext('2d');
+   // Set width and height
+   canvas.width = img.width;
+   canvas.height = img.height;
+   // Draw the image
+   ctx.drawImage(img, 0, 0);
+   return canvas.toDataURL('image/png');
+}
+
+function preloadImages(imageName , calback)
 {
 	var img=new Image();
-    img.src=url;
+    img.src="./Logo/"+imageName+".png";
+	img.class = imageName;
 	img.onload = calback;
 }

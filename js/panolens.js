@@ -3033,8 +3033,8 @@ function EnableFullScreen(isFullscreen)
 	            event.preventDefault();
 	            event.stopPropagation();
 	            //scope.mainMenu.toggle();
-				
-	            CloseClickFunction();
+				scope.settingElement.deactivate();
+	            HomeButtonClick();
 	        }
 			
 			var topPx = "40px";
@@ -7926,7 +7926,7 @@ function EnableFullScreen(isFullscreen)
 
 	            if ( !this.panorama ) {
 
-	                this.setPanorama( object );
+	               // this.setPanorama( object );
 
 	            }
 
@@ -7989,17 +7989,21 @@ function EnableFullScreen(isFullscreen)
 	    setPanorama: function ( pano ) {
 
 	        const leavingPanorama = this.panorama;
-
+			var vwr = this;
+			console.info("---------------setPanorama---------------");
+			$(".panolens-infospot").css("display","none");
+			
 	        if ( pano.type === 'panorama' && leavingPanorama !== pano ) {
 
 	            // Clear exisiting infospot
 	            this.hideInfospot();
 
 	            const afterEnterComplete = function () {
-
+					console.info("---------------afterEnterComplete---------------");
+					EnableDisableHomeScreen();
+					
 	                if ( leavingPanorama ) { leavingPanorama.onLeave(); }
 	                pano.removeEventListener( 'enter-fade-start', afterEnterComplete );
-
 	            };
 
 	            pano.addEventListener( 'enter-fade-start', afterEnterComplete );
@@ -8008,6 +8012,11 @@ function EnableFullScreen(isFullscreen)
 	            (this.panorama = pano).onEnter();
 				
 	        }
+			else
+			{
+				console.info("---------------afterEnterComplete-------else--------");
+				EnableDisableHomeScreen();
+			}
 
 	    },
 
@@ -8624,12 +8633,14 @@ function EnableFullScreen(isFullscreen)
 	        switch ( index ) {
 
 	        case CONTROLS.ORBIT:
+				console.info("---------ORBIT---------------");
 	            this.camera.position.copy( this.panorama.position );
 	            this.camera.position.z += 1;
 
 	            break;
 
 	        case CONTROLS.DEVICEORIENTATION:
+				console.info("---------DEVICEORIENTATION---------------");
 				requestOrientation();
 	            this.camera.position.copy( this.panorama.position );
 
