@@ -92,9 +92,15 @@ var InfoLinks = function()
 		for(var i=0; i < this.sceneJson.infoPoints.length; i++)
 		{
 			var infoLinkObj = this.sceneJson.infoPoints[i];
-			var infoPoint = new InfoPoint();
-			infoPoint.initialize(this.infoLinkdict , this.sceneJson.sceneName , infoLinkObj);
-			this.infoPointdict[infoLinkObj.infoPointsName] = infoPoint;
+			if(i == 0 && mobileOperatingSystem == "iOS" && parseInt(this.sceneJson.sceneName) > 4)
+			{
+				var infoPoint = new InfoPoint();
+				var tempjson = '{"infoPointsName":'+infoLinkObj.infoPointsName.toString()+',"infoPointsCoordinates":[379343.74,-1796.61,-2707.11],"infoHoverText":'+infoLinkObj.infoPointsName.toString()+'}';
+				infoPoint.initialize(this.infoLinkdict , this.sceneJson.sceneName , JSON.parse(tempjson));
+			}
+			var infoPoint1 = new InfoPoint();
+			infoPoint1.initialize(this.infoLinkdict , this.sceneJson.sceneName , infoLinkObj);
+			this.infoPointdict[infoLinkObj.infoPointsName] = infoPoint1;
 		}
 	}
 }

@@ -34,7 +34,7 @@ var dataJson = {
             "image": "3 PIC_HighestDeck_Radar_00000.jpg",
             "infoPoints": [{
                     "infoPointsName": "2",
-                    "infoPointsCoordinates": [-212230.68, -1185.78, 4362.70],
+                    "infoPointsCoordinates": [-2120.68, -1185.78, 436232.70],
                     "infoHoverText": "2"
                 },{
                     "infoPointsName": "2",
@@ -72,23 +72,23 @@ var dataJson = {
             "sceneName": "6",
             "image": "6 PIC_SecondHighestDeck2_00000.jpg",
             "infoPoints": [{
-                    "infoPointsName": "7",
-                    "infoPointsCoordinates": [4942.57, -636.68, 249.80],
-                    "infoHoverText": "7"
-                }, {
                     "infoPointsName": "5",
                     "infoPointsCoordinates": [3917.35, -507.63, -3050.55],
                     "infoHoverText": "5"
+                },{
+                    "infoPointsName": "7",
+                    "infoPointsCoordinates": [4942.57, -636.68, 249.80],
+                    "infoHoverText": "7"
                 }
             ]
         }, {
             "sceneName": "7",
             "image": "7 PIC_SecondHighestDeck3_00000.jpg",
-            "infoPoints": [{
+            "infoPoints": [ {
                     "infoPointsName": "6",
                     "infoPointsCoordinates": [-4661.91, -859.09, -1574.14],
                     "infoHoverText": "6"
-                }, {
+                },{
                     "infoPointsName": "8",
                     "infoPointsCoordinates": [4473.23, -2166.19, -502.07],
                     "infoHoverText": "8"
@@ -111,10 +111,6 @@ var dataJson = {
             "sceneName": "9",
             "image": "9 PIC_SecondHighestDeck5_00000.jpg",
             "infoPoints": [{
-                    "infoPointsName": "8",
-                    "infoPointsCoordinates": [-152323.49, -2796.89, 4139.18],
-                    "infoHoverText": "8"
-                },{
                     "infoPointsName": "8",
                     "infoPointsCoordinates": [-15.49, -2796.89, 4139.18],
                     "infoHoverText": "8"
@@ -187,7 +183,8 @@ var dataJson = {
         }, {
             "sceneName": "14",
             "image": "14 PIC_InsideCaptainRoom_00000.jpg",
-            "infoPoints": [{
+            "infoPoints": [
+				{
                     "infoPointsName": "13",
                     "infoPointsCoordinates": [-1840.64, -2277.10, -4050.81],
                     "infoHoverText": "13"
@@ -236,10 +233,6 @@ var dataJson = {
             "sceneName": "18",
             "image": "18 PIC_3rdOfficerRoom_00000.jpg",
             "infoPoints": [{
-                    "infoPointsName": "19",
-                    "infoPointsCoordinates": [469232.45, -1442.07, 914.76],
-                    "infoHoverText": "19"
-                },{
                     "infoPointsName": "19",
                     "infoPointsCoordinates": [4692.45, -1442.07, 914.76],
                     "infoHoverText": "19"
@@ -330,7 +323,8 @@ var dataJson = {
         }, {
             "sceneName": "25",
             "image": "25 PIC_ShipBlueprint_00000.jpg",
-            "infoPoints": [{
+            "infoPoints": [
+				{
                     "infoPointsName": "23",
                     "infoPointsCoordinates": [-353.70, -2478.23, 4319.85],
                     "infoHoverText": "23"
@@ -423,10 +417,6 @@ var dataJson = {
             "image": "32 PIC_EngineRoomHighestFloor_00000.jpg",
             "infoPoints": [{
                     "infoPointsName": "31",
-                    "infoPointsCoordinates": [162375.13, -1427.71, -4479.00],
-                    "infoHoverText": "31"
-                },{
-                    "infoPointsName": "31",
                     "infoPointsCoordinates": [1675.13, -1427.71, -4479.00],
                     "infoHoverText": "31"
                 },{
@@ -443,13 +433,13 @@ var dataJson = {
             "sceneName": "33",
             "image": "33 PIC_EngineRoomControlRoomDoor_00000.jpg",
             "infoPoints": [{
-                    "infoPointsName": "34",
-                    "infoPointsCoordinates": [3630.62, -3415.65, 300.19],
-                    "infoHoverText": "34"
-                },{
                     "infoPointsName": "32",
                     "infoPointsCoordinates": [-1069.53, -1077.30, 4758.37],
                     "infoHoverText": "32"
+                },{
+                    "infoPointsName": "34",
+                    "infoPointsCoordinates": [3630.62, -3415.65, 300.19],
+                    "infoHoverText": "34"
                 },{
                     "infoPointsName": "35",
                     "infoPointsCoordinates": [-4564.85, -1089.84, -1699.11],
@@ -459,10 +449,6 @@ var dataJson = {
             "sceneName": "34",
             "image": "34 PIC_EngineRoomControlRoom_00000.jpg",
             "infoPoints": [{
-                    "infoPointsName": "33",
-                    "infoPointsCoordinates": [292321.64, -455.73, 4029.02],
-                    "infoHoverText": "33"
-                },{
                     "infoPointsName": "33",
                     "infoPointsCoordinates": [2921.64, -455.73, 4029.02],
                     "infoHoverText": "33"
@@ -660,9 +646,9 @@ var dataJson = {
             "sceneName": "60",
             "image": "60 PIC_HighestEngineFloor2_00000 EXIT to outside linked to 31.jpg",
             "infoPoints": [{
-                    "infoPointsName": "32",
+                    "infoPointsName": "31",
                     "infoPointsCoordinates": [3086.69, -862.46, 3825.81],
-                    "infoHoverText": "32"
+                    "infoHoverText": "31"
                 },{
                     "infoPointsName": "61",
                     "infoPointsCoordinates": [-3826.12, -833.33, 3095.49],

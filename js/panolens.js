@@ -145,6 +145,7 @@ function EnableFullScreen(isFullscreen)
 
 	        // Enable cache
 	        THREE.Cache.enabled = true;
+			//console.log("---------load------------"+url);
 
 	        let cached, request, arrayBufferView, blob, urlCreator, image, reference;
 		
@@ -2929,27 +2930,41 @@ function EnableFullScreen(isFullscreen)
 	            event.preventDefault();
 	            event.stopPropagation();
 	            //scope.mainMenu.toggle();
-				
+				try{
+					scope.prevElement.style.backgroundImage =  'url("' + DataImage.Prev + '")'; 
+					
+					/* if(currentPanoName != "")
+					{
+						currentPanoObj = shipDeck.infoLinkdict[currentPanoName];
+						shipDeck.viewer.remove( currentPanoObj );
+					} */
+					
+					findPanoImageFromCounter();
+					panoCounter++;
+					if(panoCounter > (shipDeck.PanoList.length - 1))
+					{	
+						panoCounter = shipDeck.PanoList.length - 1;
+						scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next_disable + '")'; 
+						// do nothing and disable icon
+					}
+					else if(panoCounter == (shipDeck.PanoList.length - 1))
+					{
+						scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next_disable + '")'; 
+						SetPanoToView();
+					}
+					else
+					{
+						scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next + '")'; 
+						SetPanoToView();
+					}
+				}
+				catch(e)
+				{
+					console.info("-----------errrr found-------createNextButton-------");
+					console.info(e);
+				}
 	            //NextClickFunction();
-				scope.prevElement.style.backgroundImage =  'url("' + DataImage.Prev + '")'; 
-				findPanoImageFromCounter();
-				panoCounter++;
-				if(panoCounter > (shipDeck.PanoList.length - 1))
-				{	
-					panoCounter = shipDeck.PanoList.length - 1;
-					scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next_disable + '")'; 
-					// do nothing and disable icon
-				}
-				else if(panoCounter == (shipDeck.PanoList.length - 1))
-				{
-					scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next_disable + '")'; 
-					SetPanoToView();
-				}
-				else
-				{
-					scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next + '")'; 
-					SetPanoToView();
-				}
+				
 	        }
 			
 	        item = this.createCustomItem( { 
@@ -2981,6 +2996,13 @@ function EnableFullScreen(isFullscreen)
 	            event.stopPropagation();
 	            //scope.mainMenu.toggle();
 				scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next + '")'; 
+				/* if(currentPanoName != "")
+				{
+					currentPanoObj = shipDeck.infoLinkdict[currentPanoName];
+					shipDeck.viewer.remove( currentPanoObj );
+				} */
+				
+				
 				findPanoImageFromCounter();
 				panoCounter--;
 				if(panoCounter < 0)
@@ -3039,7 +3061,7 @@ function EnableFullScreen(isFullscreen)
 			
 			var topPx = "40px";
 			
-			if(getMobileOperatingSystem() != "iOS")
+			if(mobileOperatingSystem != "iOS")
 			{
 				topPx = "20px";
 			}
@@ -3105,9 +3127,15 @@ function EnableFullScreen(isFullscreen)
 			
 			var rightPx = "65px";
 			
-			if(getMobileOperatingSystem() != "iOS")
+			if(mobileOperatingSystem != "iOS")
 			{
 				rightPx = "105px";
+			}
+			
+			var isDisplay = "block";
+			if(mobileOperatingSystem == "unknown")
+			{
+				isDisplay = "none";
 			}
 
 	        item = this.createCustomItem( { 
@@ -3120,7 +3148,8 @@ function EnableFullScreen(isFullscreen)
 					right: rightPx,
 					bottom: '25px',
 					backgroundPosition: 'right bottom',
-					position: 'absolute'
+					position: 'absolute',
+					display: isDisplay
 
 	            },
 
@@ -3130,8 +3159,8 @@ function EnableFullScreen(isFullscreen)
 
 	        item.activate = function () {
 				console.log("----in enable----------");
-				scope.nextElement.style.backgroundImage =  '';
-				scope.prevElement.style.backgroundImage =  '';
+				scope.nextElement.style.display =  'none';
+				scope.prevElement.style.display =  'none';
 	            //this.style.transform = 'rotate3d(0,0,1,90deg)';
 				this.style.backgroundImage = 'url("' + DataImage.Vr_Enable + '")' ;
 	            this.activated = true;
@@ -3167,8 +3196,8 @@ function EnableFullScreen(isFullscreen)
 
 	            }
 				
-				scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next + '")'; 
-				scope.prevElement.style.backgroundImage =  'url("' + DataImage.Prev + '")'; 
+				scope.nextElement.style.display =  'block'; 
+				scope.prevElement.style.display =  'block'; 
 				
 	        };
 
@@ -3240,7 +3269,7 @@ function EnableFullScreen(isFullscreen)
 	            event.stopPropagation();
 	            //tapSkipped = false;
 				
-				if(getMobileOperatingSystem() != "iOS")
+				if(mobileOperatingSystem != "iOS")
 				{
 					//isFullscreen = false;
 					scope.EnableDisableFullScreen();
@@ -4645,28 +4674,31 @@ function EnableFullScreen(isFullscreen)
 	     * @fires Panorama#enter-start
 	     */
 	    onEnter: function () {
-
+			//console.info("----aaaaaaaaaa--------");
 	        const duration = this.animationDuration;
 
 	        this.leaveTransition.stop();
+			//console.info("----bbbbbbbbbb--------");
 	        this.enterTransition
 	            .to( {}, duration )
 	            .onStart( function () {
-
+					//console.info("----cccccccccccc--------");
 	                /**
 	                 * Enter panorama and animation starting event
 	                 * @event Panorama#enter-start
 	                 * @type {object} 
 	                 */
 	                this.dispatchEvent( { type: 'enter-start' } );
-					
+					//console.info("----ddddddd--------");
 	                if ( this.loaded ) {
 
 	                    this.fadeIn( duration );
+						//console.info("----eeeeeeeee--------");
 
 	                } else {
 
 	                    this.load();
+						//console.info("----fffffffff--------");
 
 	                }
 					
@@ -4679,13 +4711,14 @@ function EnableFullScreen(isFullscreen)
 	         * @type {object} 
 	         */
 	        this.dispatchEvent( { type: 'enter' } );
+			//console.info("----ggggggggg--------");
 
 	        this.children.forEach( child => {
-
+				
 	            child.dispatchEvent( { type: 'panorama-enter' } );
 
 	        } );
-
+			//console.info("----hhhhhhhh--------");
 	        this.active = true;
 
 	    },
@@ -7325,6 +7358,7 @@ function EnableFullScreen(isFullscreen)
 
 	    this.alpha = 0;
 	    this.alphaOffsetAngle = 0;
+		var isFromHere = false;
 
 
 	    var onDeviceOrientationChangeEvent = function( event ) {
@@ -7334,7 +7368,26 @@ function EnableFullScreen(isFullscreen)
 	    };
 
 	    var onScreenOrientationChangeEvent = function() {
-
+			if(window.orientation == 0)
+			{
+				if(mobileOperatingSystem != "iOS" && isFullscreen == true && shipDeck.viewer != null)
+				{
+					shipDeck.viewer.widget.EnableDisableFullScreen();
+					isFromHere = true;
+				}
+			}
+			/* else if(window.orientation == 90 && isFromHere == true)
+			{
+				if(mobileOperatingSystem != "iOS" && isFullscreen == false && shipDeck.viewer != null)
+				{
+					console.log("------orientation-----90-------------");
+					setTimeout(function(){
+						shipDeck.viewer.widget.EnableDisableFullScreen();
+					}, 1000);
+					isFromHere = false;
+				}
+			} */
+			
 	        scope.screenOrientation = window.orientation || 0;
 
 	    };
@@ -7987,36 +8040,55 @@ function EnableFullScreen(isFullscreen)
 	     * @instance
 	     */
 	    setPanorama: function ( pano ) {
-
-	        const leavingPanorama = this.panorama;
-			var vwr = this;
-			console.info("---------------setPanorama---------------");
-			$(".panolens-infospot").css("display","none");
 			
-	        if ( pano.type === 'panorama' && leavingPanorama !== pano ) {
-
-	            // Clear exisiting infospot
-	            this.hideInfospot();
-
-	            const afterEnterComplete = function () {
-					console.info("---------------afterEnterComplete---------------");
-					EnableDisableHomeScreen();
-					
-	                if ( leavingPanorama ) { leavingPanorama.onLeave(); }
-	                pano.removeEventListener( 'enter-fade-start', afterEnterComplete );
-	            };
-
-	            pano.addEventListener( 'enter-fade-start', afterEnterComplete );
-
-	            // Assign and enter panorama
-	            (this.panorama = pano).onEnter();
+			try{
+				const leavingPanorama = this.panorama;
+				var vwr = this;
+				THREE.Cache.clear();
+				if(leavingPanorama != null)
+				{
+					//console.info("----releasing memory--------");
+					THREE.Cache.remove( leavingPanorama.src );
+					//leavingPanorama.dispose();
+				} 
+				//$(".panolens-infospot").css("display","none");
 				
-	        }
-			else
-			{
-				console.info("---------------afterEnterComplete-------else--------");
-				EnableDisableHomeScreen();
+				if ( pano.type === 'panorama' && leavingPanorama !== pano ) {
+
+					// Clear exisiting infospot
+					//console.info("----11111111111--------");
+					this.hideInfospot();
+					//console.info("----22222222222--------");
+					const afterEnterComplete = function () {
+						//console.info("----333333333--------");
+						EnableDisableHomeScreen();
+						//console.info("----444444444444--------");
+						if ( leavingPanorama ) { 
+							//console.info("----555555555--------");
+							leavingPanorama.onLeave(); 
+						}
+						//console.info("----6666666666--------");
+						pano.removeEventListener( 'enter-fade-start', afterEnterComplete );
+						//console.info("----777777777777--------");
+					};
+					pano.addEventListener( 'enter-fade-start', afterEnterComplete );
+					//console.info("----888888888--------");
+					// Assign and enter panorama
+					(this.panorama = pano).onEnter();
+					//console.info("----99999999999--------");
+					
+				}
+				else
+				{
+					EnableDisableHomeScreen();
+				}
 			}
+			catch(e)
+			{
+				console.info("-----------errrr found-------setPanorama-------");
+				console.info(e);
+			}
+	        
 
 	    },
 
@@ -8137,13 +8209,13 @@ function EnableFullScreen(isFullscreen)
 	     * @instance
 	     */
 	    enableEffect: function ( mode ) {
-			if(getMobileOperatingSystem() != "iOS")
+			if(mobileOperatingSystem != "iOS")
 			{
 				isFullscreen = false;
 				this.widget.EnableDisableFullScreen();	
 			}
 			
-			if(getMobileOperatingSystem() != "unknown")
+			if(mobileOperatingSystem != "unknown")
 			{
 				this.enableControl(1);
 			} 
