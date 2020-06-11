@@ -334,14 +334,11 @@
 	{
 		try{
 		  if (audio.canPlayType("audio/mpeg")) {
-		  
-				if(audioFileList.includes(audioName.toString()))
+				if(audioFileList.includes(parseInt(audioName)))
 				{
 					audio.setAttribute("src","Audio/"+audioName+".mp3");
 					setTimeout(function(){
-						console.info("---coming for play--------");
-						if(isHomePageActive == false)
-							audio.play(); 
+						audio.play(); 
 					}, 2000);
 				}
 				else
