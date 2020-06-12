@@ -63,27 +63,27 @@
 	<!-- <img src="Logo/shipdeck.jpg" style="position:absolute;top:0px;left:0px;width:100%;height:100%;"> -->
 	<!-- <img src="Logo/logo.png" style="position:absolute;top:20px;left:20px;width:170px;"> -->
 	
-	<div onclick="LinkToPanoImage(3)"  align="center" class="LinkImage link1" style="top:40%;left:29%;">
+	<div onclick="LinkPano(3)"  align="center" class="LinkImage link1" style="top:40%;left:29%;">
 		 <img src="Logo/HighestDeckRadar.png" style="width: 100%;height: 100%;"> 
 	</div>
 	
-	<div onclick="LinkToPanoImage(9)"  align="center" class="LinkImage link2" style="top:52%;left:32%;width:9%;">
+	<div onclick="LinkPano(9)"  align="center" class="LinkImage link2" style="top:52%;left:32%;width:9%;">
 		 <img src="Logo/NavigationBridge.png" style="width: 100%;height: 100%;"> 
 	</div>
 	
-	<div onclick="LinkToPanoImage(18)"  align="center" class="LinkImage link3" style="top:62%;left:29%;width:8%;">
+	<div onclick="LinkPano(18)"  align="center" class="LinkImage link3" style="top:62%;left:29%;width:8%;">
 		 <img src="Logo/OfficerCabin.png" style="width: 100%;height: 100%;"> 
 	</div>
 	
-	  <div onclick="LinkToPanoImage(34)"  align="center" class="LinkImage link4" style="top:71%;left:32%;width:11%;">
+	  <div onclick="LinkPano(34)"  align="center" class="LinkImage link4" style="top:71%;left:32%;width:11%;">
 		 <img src="Logo/EngineControlRoom.png" style="width: 100%;height: 100%;"> 
 	</div>
 	
-	<div onclick="LinkToPanoImage(32)" align="center" class="LinkImage link5" style="top:76%;left:21%;width:8%;">
+	<div onclick="LinkPano(32)" align="center" class="LinkImage link5" style="top:76%;left:21%;width:8%;">
 		 <img src="Logo/EngineRoom.png" style="width: 100%;height: 100%;"> 
 	</div>
 	
-	<div onclick="LinkToPanoImage(1)"  align="center" class="LinkImage link6" style="top:52%;left:48%;height:5%;">
+	<div onclick="LinkPano(1)"  align="center" class="LinkImage link6" style="top:52%;left:48%;height:5%;">
 		 <img src="Logo/virtualView.png" style="width: 100%;height: 100%;"> 
 	</div>
 	
@@ -114,45 +114,23 @@
 	var mobileOperatingSystem = "";
 	
 	var progressElement = document.getElementById( 'progress' );
-
-	function LinkToPanoImage(infoPointName)
+	
+	
+	function LinkPano(infoPointName)
 	{
-	
-		/*if(currentPanoName != "")
-		{
-			currentPanoObj = shipDeck.infoLinkdict[currentPanoName];
-			shipDeck.viewer.remove( currentPanoObj );
-		}*/
-	
-		isHomePageActive = false;
 		currentPanoName = infoPointName.toString();
-		currentPanoObj = shipDeck.infoLinkdict[currentPanoName];
-		//shipDeck.viewer.add( currentPanoObj );
-		shipDeck.viewer.setPanorama(currentPanoObj);
-		/*if(getMobileOperatingSystem() != "iOS")
-		{
-			shipDeck.viewer.widget.EnableDisableFullScreen();
-		}*/
-		
-		setTimeout(function(){
-			if(mobileOperatingSystem != "unknown")
-			{
-				shipDeck.viewer.enableControl(1);		
-			}
-		}, 1000);
-		
+		isHomePageActive = false;
+		shipDeck.LoadImagePanorama(infoPointName);
 		if(mobileOperatingSystem != "unknown")
 		{
 			shipDeck.viewer.enableControl(1);		
-		} 
+		}
 		findPanoImageFromCounter();
-		//$("#centerDivId").fadeOut();
 		PlayAudio(currentPanoName);
 	}
 	
 	function EnableDisableHomeScreen()
 	{
-		//console.info("------------EnableDisableHomeScreen------------------");
 		if(isHomePageActive == false)
 		{
 			$("#centerDivId").css("display","none");
@@ -160,10 +138,6 @@
 			{
 				shipDeck.viewer.widget.EnableDisableFullScreen();
 			}
-			/*if(getMobileOperatingSystem() != "unknown")
-			{
-				shipDeck.viewer.enableControl(1);		
-			}*/
 			isHomePageActive = true;
 		}
 	}
@@ -200,9 +174,7 @@
 	function SetPanoToView()
 	{
 		currentPanoName = shipDeck.PanoList[panoCounter];
-		currentPanoObj = shipDeck.infoLinkdict[currentPanoName];
-		//shipDeck.viewer.add( currentPanoObj );
-		shipDeck.viewer.setPanorama(currentPanoObj);
+		shipDeck.LoadImagePanorama(currentPanoName);
 		PlayAudio(currentPanoName);
 	}
 	
@@ -244,7 +216,7 @@
 				}
 				else
 				{
-					console.info("No audio found");
+					//console.info("No audio found");
 				}
 			}
 		}

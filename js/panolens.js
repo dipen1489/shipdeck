@@ -2938,7 +2938,6 @@ function EnableFullScreen(isFullscreen)
 						currentPanoObj = shipDeck.infoLinkdict[currentPanoName];
 						shipDeck.viewer.remove( currentPanoObj );
 					} */
-					
 					findPanoImageFromCounter();
 					panoCounter++;
 					if(panoCounter > (shipDeck.PanoList.length - 1))
@@ -8044,11 +8043,11 @@ function EnableFullScreen(isFullscreen)
 			try{
 				const leavingPanorama = this.panorama;
 				var vwr = this;
-				THREE.Cache.clear();
+				//THREE.Cache.clear();
 				if(leavingPanorama != null)
 				{
 					//console.info("----releasing memory--------");
-					THREE.Cache.remove( leavingPanorama.src );
+					//THREE.Cache.remove( leavingPanorama.src );
 					//leavingPanorama.dispose();
 				} 
 				//$(".panolens-infospot").css("display","none");

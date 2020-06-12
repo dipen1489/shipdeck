@@ -16,6 +16,10 @@ var ShipDeck = function()
 	this.progressElement;
 	this.PanoList = [];
 	this.infoPointSize = 600;
+	this.CurrentPanorama;
+	this.lastPanorama;
+	this.oldPanoList = [];
+	
 	this.initialize = function(data)
 	{
 		this.dataJson = data;
@@ -42,11 +46,35 @@ var ShipDeck = function()
 		this.progressElement = document.getElementById('progress');
 		this.viewer = new PANOLENS.Viewer({clickTolerance:0, cameraFov:80, enableReticle: false,   /* output: 'console', */  viewIndicator: true, autoRotate: false, autoRotateSpeed: 2, autoRotateActivationDuration: 5000, dwellTime: 2000 });//cameraFov zoom of camera
 		this.CreateImagePanorama();
-		this.CreateInfoLinks();
-		/* if(getMobileOperatingSystem() != "unknown")
+	}
+	
+	this.LoadImagePanorama = function(panoname)
+	{
+		var obj = this;
+		var sceneObj = this.infoLinkdict[panoname];
+		this.CurrentPanorama = new PANOLENS.ImagePanorama("./images/"+sceneObj.image);
+		this.CurrentPanorama.name = sceneObj.sceneName;
+		currentPanoName = sceneObj.sceneName;
+		this.CurrentPanorama.addEventListener( 'progress', onProgress );
+		this.CurrentPanorama.addEventListener( 'enter', onEnter );
+		for(var i=0; i < sceneObj.infoPoints.length; i++)
 		{
-			//this.viewer.enableControl(1);		
-		} */ 
+			var infoLinkObj = sceneObj.infoPoints[i];
+			var infoPoint = new InfoPoint();
+			infoPoint.initialize(this , sceneObj.sceneName , infoLinkObj);
+			//this.infoPointdict[infoLinkObj.infoPointsName] = infoPoint;
+		}
+		this.viewer.add( this.CurrentPanorama );
+		this.viewer.setPanorama(this.CurrentPanorama);
+		PlayAudio(currentPanoName);
+		this.oldPanoList.push(this.CurrentPanorama);
+		console.log("old len : "+this.oldPanoList.length);
+		if(this.oldPanoList.length > 5)
+		{
+			var lastPano = this.oldPanoList[0];
+			lastPano && lastPano.dispose() && this.viewer.remove( lastPano );
+			this.oldPanoList.shift();
+		}
 	}
 	
 	this.CreateImagePanorama = function()
@@ -54,53 +82,8 @@ var ShipDeck = function()
 		for(var i=0; i < this.dataJson.scenes.length; i++)
 		{
 			var sceneObj = this.dataJson.scenes[i];
-			var panorama = new PANOLENS.ImagePanorama("./images/"+sceneObj.image);
-			panorama.name = sceneObj.sceneName;
-			panorama.addEventListener( 'progress', onProgress );
-			//panorama.setLinkingImage(imageIconArray[sceneObj.sceneName],600);
-			panorama.addEventListener( 'enter', onEnter );
-			this.viewer.add( panorama );
-			this.infoLinkdict[sceneObj.sceneName] = panorama;
+			this.infoLinkdict[sceneObj.sceneName] = sceneObj;
 			this.PanoList.push(sceneObj.sceneName);
-		}
-	}
-
-	this.CreateInfoLinks = function()
-	{
-		for(var i=0; i < this.dataJson.scenes.length; i++)
-		{
-			var sceneObj = this.dataJson.scenes[i];
-			var infoLinks = new InfoLinks();
-			infoLinks.initialize(this.infoLinkdict, sceneObj);
-		}
-	}
-}
-
-var InfoLinks = function()
-{
-	this.infoPointdict = {};
-	this.infoLinkdict = {};
-	this.initialize = function(dict , sceneObj)
-	{
-		this.infoLinkdict = dict;
-		this.sceneJson = sceneObj;
-		this.createInfoLink();
-	}
-	
-	this.createInfoLink = function()
-	{
-		for(var i=0; i < this.sceneJson.infoPoints.length; i++)
-		{
-			var infoLinkObj = this.sceneJson.infoPoints[i];
-			if(i == 0 && mobileOperatingSystem == "iOS" && parseInt(this.sceneJson.sceneName) > 4)
-			{
-				var infoPoint = new InfoPoint();
-				var tempjson = '{"infoPointsName":'+infoLinkObj.infoPointsName.toString()+',"infoPointsCoordinates":[379343.74,-1796.61,-2707.11],"infoHoverText":'+infoLinkObj.infoPointsName.toString()+'}';
-				infoPoint.initialize(this.infoLinkdict , this.sceneJson.sceneName , JSON.parse(tempjson));
-			}
-			var infoPoint1 = new InfoPoint();
-			infoPoint1.initialize(this.infoLinkdict , this.sceneJson.sceneName , infoLinkObj);
-			this.infoPointdict[infoLinkObj.infoPointsName] = infoPoint1;
 		}
 	}
 }
@@ -108,13 +91,14 @@ var InfoLinks = function()
 var InfoPoint = function()
 {
 	this.infoPointSize = 600;
-	this.infoLinkdict = {};
-	this.initialize = function(dict , sceneName, infoLink)
+	this.infospot;
+	this.shipdeckObj;
+	this.initialize = function(shipdeck , sceneName, infoLink)
 	{
-		this.infoLinkdict = dict;
 		this.sceneName = sceneName;
 		this.infoLink = infoLink;
-		this.panorama = dict[sceneName];
+		this.shipdeckObj = shipdeck;
+		this.panorama = this.shipdeckObj.CurrentPanorama;
 		this.HoverText = infoLink.infoHoverText;
 		this.createInfoSpot();
 	}
@@ -122,7 +106,13 @@ var InfoPoint = function()
 	this.createInfoSpot = function()
 	{
 		var iconName = this.infoLink.infoPointsName;
-		this.panorama.link( this.infoLinkdict[iconName], new THREE.Vector3( this.infoLink.infoPointsCoordinates[0], this.infoLink.infoPointsCoordinates[1], this.infoLink.infoPointsCoordinates[2] ) , this.infoPointSize , imageIconArray[iconName] , this.HoverText);
+		this.infospot = new PANOLENS.Infospot( this.infoPointSize, imageIconArray[iconName] );
+        this.infospot.position.set( this.infoLink.infoPointsCoordinates[0], this.infoLink.infoPointsCoordinates[1], this.infoLink.infoPointsCoordinates[2] );
+		var shipdeck = this.shipdeckObj;
+		this.infospot.addEventListener( 'click', function(){
+			shipdeck.LoadImagePanorama(iconName);
+		});
+		this.panorama.add(this.infospot);
 	}
 }
 
