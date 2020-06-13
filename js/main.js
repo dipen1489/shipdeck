@@ -52,7 +52,7 @@ var ShipDeck = function()
 	{
 		console.log("panoname : "+panoname);
 		var sceneObj = this.infoLinkdict[panoname];
-		this.CurrentPanorama = new PANOLENS.ImagePanorama("./images1/"+sceneObj.image);
+		this.CurrentPanorama = new PANOLENS.ImagePanorama("./images/"+sceneObj.image);
 		this.CurrentPanorama.name = sceneObj.sceneName;
 		currentPanoName = sceneObj.sceneName;
 		this.CurrentPanorama.addEventListener( 'progress', onProgress );
