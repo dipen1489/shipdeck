@@ -129,7 +129,10 @@
 			shipDeck.viewer.enableControl(1);		
 		}
 		findPanoImageFromCounter();
-		//PlayAudio(currentPanoName);
+		if(mobileOperatingSystem == "iOS")
+		{
+			PlayAudio(currentPanoName);
+		}
 	}
 	
 	function EnableDisableHomeScreen()
@@ -143,7 +146,10 @@
 			}
 			isHomePageActive = true;
 		}
-		PlayAudio(currentPanoName);
+		if(mobileOperatingSystem != "iOS")
+		{
+			PlayAudio(currentPanoName);
+		}
 	}
 	
 
@@ -180,7 +186,6 @@
 		currentPanoName = shipDeck.PanoList[panoCounter];
 		shipDeck.LoadImagePanorama(currentPanoName);
 		isLoadingPanorama = false;
-		//PlayAudio(currentPanoName);
 	}
 	
 	function findPanoImageFromCounter()
@@ -218,7 +223,9 @@
 					audio.setAttribute("src","Audio/"+audioName+".mp3");
 					setTimeout(function(){
 						if(!isHomePage)
+						{
 							audio.play(); 
+						}
 					}, 2000);
 				}
 				else

@@ -66,7 +66,10 @@ var ShipDeck = function()
 		}
 		this.viewer.add( this.CurrentPanorama );
 		this.viewer.setPanorama(this.CurrentPanorama);
-		//PlayAudio(currentPanoName);
+		if(mobileOperatingSystem == "iOS")
+		{
+			PlayAudio(currentPanoName);
+		}
 		this.oldPanoList.push(this.CurrentPanorama);
 		if(this.oldPanoList.length > 5)
 		{
