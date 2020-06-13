@@ -2145,17 +2145,15 @@ function EnableFullScreen(isFullscreen)
 	     * @instance
 	     */
 	    onHoverStart: function ( event ) {
-
+			//console.log("---------onHoverStart-------------");
+			
 	        if ( !this.getContainer() ) { return; }
-
 	        const cursorStyle = this.cursorStyle || ( this.mode === MODES.NORMAL ? 'pointer' : 'default' );
 	        const { scaleDownAnimation, scaleUpAnimation, element } = this;
-
+			//console.log(element);
 	        this.isHovering = true;
 	        this.container.style.cursor = cursorStyle;
-			
 	        if ( this.animated ) {
-
 	            scaleDownAnimation.stop();
 	            scaleUpAnimation.start();
 
@@ -2163,10 +2161,10 @@ function EnableFullScreen(isFullscreen)
 			
 	        if ( element && event.mouseEvent.clientX >= 0 && event.mouseEvent.clientY >= 0 ) {
 
-	            const { left, right, style } = element;
-
+	            var { left, right, style } = element;
+				
 	            if ( this.mode === MODES.CARDBOARD || this.mode === MODES.STEREO ) {
-
+					console.log("-------7-------------");
 	                style.display = 'none';
 	                left.style.display = 'block';
 	                right.style.display = 'block';
@@ -2176,7 +2174,7 @@ function EnableFullScreen(isFullscreen)
 	                element._height = left.clientHeight;
 
 	            } else {
-
+					console.log("-------8-------------");
 	                style.display = 'block';
 	                if ( left ) { left.style.display = 'none'; }
 	                if ( right ) { right.style.display = 'none'; }
@@ -2198,11 +2196,11 @@ function EnableFullScreen(isFullscreen)
 	     * @instance
 	     */
 	    onHoverEnd: function () {
-
+			//console.log("-------onHoverEnd-------------");
 	        if ( !this.getContainer() ) { return; }
 
 	        const { scaleDownAnimation, scaleUpAnimation, element } = this;
-
+			//console.log(element);
 	        this.isHovering = false;
 	        this.container.style.cursor = 'default';
 
@@ -2235,7 +2233,6 @@ function EnableFullScreen(isFullscreen)
 	     * @instance
 	     */
 	    onDualEyeEffect: function ( event ) {
-			
 	        if ( !this.getContainer() ) { return; }
 
 	        let element, halfWidth, halfHeight;
@@ -2938,24 +2935,36 @@ function EnableFullScreen(isFullscreen)
 						currentPanoObj = shipDeck.infoLinkdict[currentPanoName];
 						shipDeck.viewer.remove( currentPanoObj );
 					} */
-					findPanoImageFromCounter();
-					panoCounter++;
-					if(panoCounter > (shipDeck.PanoList.length - 1))
-					{	
-						panoCounter = shipDeck.PanoList.length - 1;
-						scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next_disable + '")'; 
-						// do nothing and disable icon
-					}
-					else if(panoCounter == (shipDeck.PanoList.length - 1))
+					console.log("isLoadingPanorama : "+isLoadingPanorama);
+					if(!isLoadingPanorama)
 					{
-						scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next_disable + '")'; 
-						SetPanoToView();
+						isLoadingPanorama = true;
+						findPanoImageFromCounter();
+						panoCounter++;
+						if(panoCounter > (shipDeck.PanoList.length - 1))
+						{	
+							panoCounter = shipDeck.PanoList.length - 1;
+							scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next_disable + '")'; 
+							isLoadingPanorama = false;
+							// do nothing and disable icon
+						}
+						else if(panoCounter == (shipDeck.PanoList.length - 1))
+						{
+							scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next_disable + '")'; 
+							SetPanoToView();
+						}
+						else
+						{
+							scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next + '")'; 
+							SetPanoToView();
+						}
+						
 					}
 					else
 					{
-						scope.nextElement.style.backgroundImage =  'url("' + DataImage.Next + '")'; 
-						SetPanoToView();
+						console.log("Loading please wait...");
 					}
+					
 				}
 				catch(e)
 				{
@@ -3000,27 +3009,31 @@ function EnableFullScreen(isFullscreen)
 					currentPanoObj = shipDeck.infoLinkdict[currentPanoName];
 					shipDeck.viewer.remove( currentPanoObj );
 				} */
-				
-				
-				findPanoImageFromCounter();
-				panoCounter--;
-				if(panoCounter < 0)
+				if(!isLoadingPanorama)
 				{
-					panoCounter = 0;
-					//console.log(shipDeck.viewer.widget.prevElement);
-					//console.log(shipDeck.viewer.DataImage);
-					scope.prevElement.style.backgroundImage =  'url("' + DataImage.Prev_disable + '")'; 
-					// do nothing and disable icon
-				}
-				else if(panoCounter == 0)
-				{
-					scope.prevElement.style.backgroundImage =  'url("' + DataImage.Prev_disable + '")'; 
-					SetPanoToView();
-				}
-				else
-				{
-					SetPanoToView();
-					scope.prevElement.style.backgroundImage =  'url("' + DataImage.Prev + '")'; 
+					isLoadingPanorama = true;
+					findPanoImageFromCounter();
+					panoCounter--;
+					if(panoCounter < 0)
+					{
+						panoCounter = 0;
+						//console.log(shipDeck.viewer.widget.prevElement);
+						//console.log(shipDeck.viewer.DataImage);
+						scope.prevElement.style.backgroundImage =  'url("' + DataImage.Prev_disable + '")'; 
+						isLoadingPanorama = false;
+						// do nothing and disable icon
+					}
+					else if(panoCounter == 0)
+					{
+						scope.prevElement.style.backgroundImage =  'url("' + DataImage.Prev_disable + '")'; 
+						SetPanoToView();
+						
+					}
+					else
+					{
+						SetPanoToView();
+						scope.prevElement.style.backgroundImage =  'url("' + DataImage.Prev + '")'; 
+					}
 				}
 	            //PrevClickFunction();
 	        }
@@ -3157,7 +3170,6 @@ function EnableFullScreen(isFullscreen)
 	        } );
 
 	        item.activate = function () {
-				console.log("----in enable----------");
 				scope.nextElement.style.display =  'none';
 				scope.prevElement.style.display =  'none';
 	            //this.style.transform = 'rotate3d(0,0,1,90deg)';
@@ -3169,7 +3181,6 @@ function EnableFullScreen(isFullscreen)
 	        };
 
 	        item.deactivate = function () {
-				console.log("----in disable----------");
 				scope.viewer.disableEffect();
 	            //this.style.transform = 'rotate3d(0,0,0,0)';
 				this.style.backgroundImage = 'url("' + DataImage.Vr_Disable + '")';
@@ -4547,6 +4558,17 @@ function EnableFullScreen(isFullscreen)
 	        this.visible = false;
 
 	    },
+		
+		addInfospot: function(scale , img , position , infoText , callbackFun , pano)
+		{
+			const spot = new Infospot( scale, img );
+	        spot.position.copy( position );
+	        spot.toPanorama = pano;
+			spot.addHoverText( infoText );
+	        spot.addEventListener( 'click', callbackFun.bind( this ) );
+	        this.linkedSpots.push( spot );
+	        this.add( spot );
+		},
 
 	    reset: function () {
 
@@ -4673,31 +4695,25 @@ function EnableFullScreen(isFullscreen)
 	     * @fires Panorama#enter-start
 	     */
 	    onEnter: function () {
-			//console.info("----aaaaaaaaaa--------");
 	        const duration = this.animationDuration;
 
 	        this.leaveTransition.stop();
-			//console.info("----bbbbbbbbbb--------");
 	        this.enterTransition
 	            .to( {}, duration )
 	            .onStart( function () {
-					//console.info("----cccccccccccc--------");
 	                /**
 	                 * Enter panorama and animation starting event
 	                 * @event Panorama#enter-start
 	                 * @type {object} 
 	                 */
 	                this.dispatchEvent( { type: 'enter-start' } );
-					//console.info("----ddddddd--------");
 	                if ( this.loaded ) {
 
 	                    this.fadeIn( duration );
-						//console.info("----eeeeeeeee--------");
 
 	                } else {
 
 	                    this.load();
-						//console.info("----fffffffff--------");
 
 	                }
 					
@@ -4710,14 +4726,12 @@ function EnableFullScreen(isFullscreen)
 	         * @type {object} 
 	         */
 	        this.dispatchEvent( { type: 'enter' } );
-			//console.info("----ggggggggg--------");
 
 	        this.children.forEach( child => {
 				
 	            child.dispatchEvent( { type: 'panorama-enter' } );
 
 	        } );
-			//console.info("----hhhhhhhh--------");
 	        this.active = true;
 
 	    },
@@ -8046,7 +8060,6 @@ function EnableFullScreen(isFullscreen)
 				//THREE.Cache.clear();
 				if(leavingPanorama != null)
 				{
-					//console.info("----releasing memory--------");
 					//THREE.Cache.remove( leavingPanorama.src );
 					//leavingPanorama.dispose();
 				} 
@@ -8055,26 +8068,17 @@ function EnableFullScreen(isFullscreen)
 				if ( pano.type === 'panorama' && leavingPanorama !== pano ) {
 
 					// Clear exisiting infospot
-					//console.info("----11111111111--------");
 					this.hideInfospot();
-					//console.info("----22222222222--------");
 					const afterEnterComplete = function () {
-						//console.info("----333333333--------");
 						EnableDisableHomeScreen();
-						//console.info("----444444444444--------");
 						if ( leavingPanorama ) { 
-							//console.info("----555555555--------");
 							leavingPanorama.onLeave(); 
 						}
-						//console.info("----6666666666--------");
 						pano.removeEventListener( 'enter-fade-start', afterEnterComplete );
-						//console.info("----777777777777--------");
 					};
 					pano.addEventListener( 'enter-fade-start', afterEnterComplete );
-					//console.info("----888888888--------");
 					// Assign and enter panorama
 					(this.panorama = pano).onEnter();
-					//console.info("----99999999999--------");
 					
 				}
 				else

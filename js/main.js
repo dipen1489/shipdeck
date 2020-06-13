@@ -33,9 +33,7 @@ var ShipDeck = function()
 				imageIconArray[e.currentTarget.class] = getDataUrl(e.currentTarget);
 				if(count == infospotNameList.length)
 				{
-					console.info(infospotNameList.length);
 					obj.CreatePano();
-					
 				}
 			});
 		}
@@ -43,20 +41,23 @@ var ShipDeck = function()
 	
 	this.CreatePano = function()
 	{
-		this.progressElement = document.getElementById('progress');
+		//this.progressElement = document.getElementById('progress');
 		this.viewer = new PANOLENS.Viewer({clickTolerance:0, cameraFov:80, enableReticle: false,   /* output: 'console', */  viewIndicator: true, autoRotate: false, autoRotateSpeed: 2, autoRotateActivationDuration: 5000, dwellTime: 2000 });//cameraFov zoom of camera
 		this.CreateImagePanorama();
+		$(".panolens-container").append('<div id="progressId" style="width: 100%;z-index:1000;" class="finish"></div>');
+		progressElement = document.getElementById( 'progressId' );
 	}
 	
 	this.LoadImagePanorama = function(panoname)
 	{
-		var obj = this;
+		console.log("panoname : "+panoname);
 		var sceneObj = this.infoLinkdict[panoname];
-		this.CurrentPanorama = new PANOLENS.ImagePanorama("./images/"+sceneObj.image);
+		this.CurrentPanorama = new PANOLENS.ImagePanorama("./images1/"+sceneObj.image);
 		this.CurrentPanorama.name = sceneObj.sceneName;
 		currentPanoName = sceneObj.sceneName;
 		this.CurrentPanorama.addEventListener( 'progress', onProgress );
 		this.CurrentPanorama.addEventListener( 'enter', onEnter );
+		
 		for(var i=0; i < sceneObj.infoPoints.length; i++)
 		{
 			var infoLinkObj = sceneObj.infoPoints[i];
@@ -66,15 +67,15 @@ var ShipDeck = function()
 		}
 		this.viewer.add( this.CurrentPanorama );
 		this.viewer.setPanorama(this.CurrentPanorama);
-		PlayAudio(currentPanoName);
+		//PlayAudio(currentPanoName);
 		this.oldPanoList.push(this.CurrentPanorama);
-		console.log("old len : "+this.oldPanoList.length);
 		if(this.oldPanoList.length > 5)
 		{
 			var lastPano = this.oldPanoList[0];
 			lastPano && lastPano.dispose() && this.viewer.remove( lastPano );
 			this.oldPanoList.shift();
 		}
+		
 	}
 	
 	this.CreateImagePanorama = function()
@@ -107,11 +108,15 @@ var InfoPoint = function()
 	{
 		var iconName = this.infoLink.infoPointsName;
 		this.infospot = new PANOLENS.Infospot( this.infoPointSize, imageIconArray[iconName] );
+		//this.infospot.addHoverText( iconName );
         this.infospot.position.set( this.infoLink.infoPointsCoordinates[0], this.infoLink.infoPointsCoordinates[1], this.infoLink.infoPointsCoordinates[2] );
+		
 		var shipdeck = this.shipdeckObj;
 		this.infospot.addEventListener( 'click', function(){
+			$(".panolens-infospot").css("display","none");
 			shipdeck.LoadImagePanorama(iconName);
 		});
+		
 		this.panorama.add(this.infospot);
 	}
 }

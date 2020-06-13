@@ -91,7 +91,7 @@
 
 
 
-<div id="progress" style="width: 100%;z-index:1000;" class="finish"></div>
+<!-- <div id="progress" style="width: 100%;z-index:1000;" class="finish"></div> -->
 <label id="LoadingLabelId" style="position:absolute;display:none;top:40%;left:30%;font-size:40px;color:#eeeeee;z-index:1;">Loading page, Please wait...</label>
 <audio id="myAudio">
 	<source id="audioSource" type="audio/mpeg"/>
@@ -111,14 +111,17 @@
 	var currentPanoName = "";
 	var currentPanoObj;
 	var isHomePageActive = true;
+	var isHomePage = true;
 	var mobileOperatingSystem = "";
+	var isLoadingPanorama = false;
 	
-	var progressElement = document.getElementById( 'progress' );
+	var progressElement;
 	
 	
 	function LinkPano(infoPointName)
 	{
 		currentPanoName = infoPointName.toString();
+		isHomePage = false;
 		isHomePageActive = false;
 		shipDeck.LoadImagePanorama(infoPointName);
 		if(mobileOperatingSystem != "unknown")
@@ -140,6 +143,7 @@
 			}
 			isHomePageActive = true;
 		}
+		PlayAudio(currentPanoName);
 	}
 	
 
@@ -175,6 +179,8 @@
 	{
 		currentPanoName = shipDeck.PanoList[panoCounter];
 		shipDeck.LoadImagePanorama(currentPanoName);
+		isLoadingPanorama = false;
+		console.log("---comes here----------");
 		PlayAudio(currentPanoName);
 	}
 	
@@ -185,6 +191,7 @@
 	
 	function HomeButtonClick()
 	{
+		isHomePage = true;
 		isHomePageActive = true;
 		if(mobileOperatingSystem != "iOS" && isFullscreen == true)
 		{
@@ -211,7 +218,8 @@
 				{
 					audio.setAttribute("src","Audio/"+audioName+".mp3");
 					setTimeout(function(){
-						audio.play(); 
+						if(!isHomePage)
+							audio.play(); 
 					}, 2000);
 				}
 				else
