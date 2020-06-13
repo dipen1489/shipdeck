@@ -180,7 +180,6 @@
 		currentPanoName = shipDeck.PanoList[panoCounter];
 		shipDeck.LoadImagePanorama(currentPanoName);
 		isLoadingPanorama = false;
-		console.log("---comes here----------");
 		PlayAudio(currentPanoName);
 	}
 	
@@ -237,7 +236,6 @@
     function onProgress ( event ) {
         progress = event.progress.loaded / event.progress.total * 100;
         progressElement.style.width = progress + '%';
-		console.log("progress : "+progress);
         if ( progress === 100 ) {
             progressElement.classList.add( 'finish' );
 			//console.log("-------process done--------");
