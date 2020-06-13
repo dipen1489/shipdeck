@@ -16,7 +16,7 @@
         background-color: #000;
       }
 
-	#progress {
+	#progressId {
         width: 0;
         height: 5px;
         position: fixed;
@@ -26,7 +26,7 @@
         transition: opacity 0.5s ease;
       }
 
-    #progress.finish {
+    #progressId.finish {
         opacity: 0;
     }
 	
@@ -116,7 +116,7 @@
 	var isLoadingPanorama = false;
 	
 	var progressElement;
-	
+	//progressElement = document.getElementById( 'progress' );
 	
 	function LinkPano(infoPointName)
 	{
@@ -129,7 +129,7 @@
 			shipDeck.viewer.enableControl(1);		
 		}
 		findPanoImageFromCounter();
-		PlayAudio(currentPanoName);
+		//PlayAudio(currentPanoName);
 	}
 	
 	function EnableDisableHomeScreen()
@@ -237,6 +237,7 @@
     function onProgress ( event ) {
         progress = event.progress.loaded / event.progress.total * 100;
         progressElement.style.width = progress + '%';
+		console.log("progress : "+progress);
         if ( progress === 100 ) {
             progressElement.classList.add( 'finish' );
 			//console.log("-------process done--------");

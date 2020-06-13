@@ -50,7 +50,6 @@ var ShipDeck = function()
 	
 	this.LoadImagePanorama = function(panoname)
 	{
-		console.log("panoname : "+panoname);
 		var sceneObj = this.infoLinkdict[panoname];
 		this.CurrentPanorama = new PANOLENS.ImagePanorama("./images/"+sceneObj.image);
 		this.CurrentPanorama.name = sceneObj.sceneName;
